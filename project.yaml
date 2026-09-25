@@ -1,0 +1,17 @@
+# Card metadata consumed by https://designmolecule.com
+name: PVTrace
+slug: pvtrace
+area: CleanTech
+status: concept          # concept | design | prototype | tested | released
+shortlisted: false
+pitch: >-
+  A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
+problem: >-
+  Installers and reuse programs judge panels by eye or by a single voltage reading, missing faults that an IV curve shows at once. Commercial tracers cost thousands.
+budget_usd: 150
+difficulty: 3  # 1 easiest, 5 hardest
+hero_image: media/hero.png
+licenses:
+  hardware: CERN-OHL-S-2.0
+  software: MIT
+tags: [cleantech, open-hardware, cern-ohl-s]
