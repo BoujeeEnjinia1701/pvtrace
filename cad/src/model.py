@@ -5,7 +5,7 @@ Exports STEP and STL into cad/step and cad/stl, prints the main envelopes and
 checks that no two internal parts overlap.
 
 Massing-plus detail: correct interfaces (cable glands, isolator knob, display
-window, sensor pod with frame clip) and main dimensions; not fabrication detail.
+window and sun hood, sensor pod with frame clip) and main dimensions; not fabrication detail.
 PRELIMINARY, NOT FOR FABRICATION.
 
 Axes: X along the case length (test lead glands on the +X end, sensor cable
@@ -23,6 +23,9 @@ PARAMS = {
     "z_split": 52.0,            # body and lid parting line
     "bumper": 14.0,             # rubber corner bumper, square, centered on each vertical edge
     "window": (78.0, 56.0),     # display window in the lid
+    # Display sun hood over the window (PVT-DDR-002, item 12): three walls and a roof lip,
+    # open on the -Y (user) side; top level with the isolator knob top (Z 98), inside R12
+    "hood_in": (82.0, 60.0), "hood_wall": 2.0, "hood_h": 18.0, "hood_lip": 20.0,
     "gland_lead_r": 9.0,        # M16 glands for the test leads
     "gland_sensor_r": 7.0,      # M12 gland for the sensor cable
     "gland_y": 20.0,            # test lead glands at +/- this Y
@@ -84,6 +87,16 @@ def build_parts():
     parts["lid"] = lid
     parts["window"] = Pos(cx, cy, H - 1.5) * Box(wx, wy, 1.5)
 
+    # 15 Display sun hood (printed, screwed to the lid around the window)
+    hx, hy = P["hood_in"]; hw, hh, hl = P["hood_wall"], P["hood_h"], P["hood_lip"]
+    ox, oy = hx + 2 * hw, hy + 2 * hw
+    zc = H + hh / 2
+    hood = (Pos(cx, cy + hy / 2 + hw / 2, zc) * Box(ox, hw, hh)                 # back wall (+Y)
+            + Pos(cx - hx / 2 - hw / 2, cy, zc) * Box(hw, oy, hh)               # side walls
+            + Pos(cx + hx / 2 + hw / 2, cy, zc) * Box(hw, oy, hh)
+            + Pos(cx, cy + oy / 2 - hl / 2, H + hh - hw / 2) * Box(ox, hl, hw))  # roof lip
+    parts["hood"] = hood
+
     # 3 Controller and display board under the window
     c = P["controller"]
     parts["controller"] = _box(c, (cx, cy, H - t - c[2] / 2 - 1))
@@ -143,16 +156,19 @@ def interference(parts):
         v = (parts[a] & parts["body"]).volume + (parts[a] & parts["lid"]).volume
         if v > 1.0 and a != "isolator":
             bad[(a, "case")] = v
+    v = (parts["hood"] & parts["isolator"]).volume
+    if v > 1.0:
+        bad[("hood", "isolator")] = v
     return bad
 
 
 def assemblies(parts):
     from build123d import Compound
-    inst = [parts[k] for k in ["body", "lid", "window", "controller", "meas", "isolation", "fets",
+    inst = [parts[k] for k in ["body", "lid", "window", "hood", "controller", "meas", "isolation", "fets",
                                 "dump_res", "fuse", "battery", "caps", "isolator", "leads"]]
     return {
         "pvtrace-assembly": Compound(inst),
-        "pvtrace-enclosure": Compound([parts["body"], parts["lid"], parts["window"]]),
+        "pvtrace-enclosure": Compound([parts["body"], parts["lid"], parts["window"], parts["hood"]]),
         "pvtrace-sensor-pod": parts["pod"],
     }
 
@@ -170,4 +186,5 @@ if __name__ == "__main__":
         print(f"{name}: {bb.size.X:.0f} x {bb.size.Y:.0f} x {bb.size.Z:.0f} mm")
     shell = parts["body"].volume + parts["lid"].volume
     print(f"case shell volume incl. bumpers and glands: {shell / 1000:.0f} cm3")
+    print(f"sun hood volume: {parts['hood'].volume / 1000:.1f} cm3")
     print("interference check:", "none" if not clash else f"{len(clash)} clashes")

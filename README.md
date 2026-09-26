@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $150 USD · **Difficulty:** 3 of 5
+**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $165 USD · **Difficulty:** 3 of 5
 
 A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
 
@@ -14,7 +14,7 @@ A handheld solar panel IV curve tracer that sweeps a panel's current and voltage
 
 An IV curve is the most informative single test of a solar module: one sweep from short circuit to open circuit shows its power, and the shape of the curve points to shading, a failed bypass diode, cracked cells, corroded connections or plain wear. PVTrace uses the simplest load that can trace that curve, a capacitor bank that the module charges in a few tens of milliseconds, as proven open designs such as [IV Swinger 2](https://github.com/csatt/IV_Swinger) and [Cáceres et al. (2020)](https://doi.org/10.3390/en13174320) have done. It adds what a field user needs: a handheld case with a screen, an irradiance reference cell and temperature probe, translation to standard test conditions and a transparent grading rule.
 
-Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about $160 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
+Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about $164 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
 
 ## Burning platform
 
@@ -47,7 +47,7 @@ The obstacle is trust. Refurbished modules exported to secondary markets show 10
 
 ## What sparked the idea
 
-It came out of a September 2026 review of Design Molecule's applied research areas against the open projects already in the lab. It extends the lab's clean tech and circular work, alongside CellCheck, which grades salvaged battery cells. The trigger in the wider world is the growing trade in used modules and recent work showing that exported refurbished panels often underperform, while grading schemes are being proposed to rebuild buyer confidence ([Huang and Long, 2026](https://www.nature.com/articles/s41467-026-69171-z); [UniSA, 2025](https://unisa.edu.au/media-centre/Releases/2025/old-solar-panels-can-power-new-future/)).
+The starting point was the hailstorm of March 15, 2024, which damaged thousands of modules at the 350 MW Fighting Jays solar farm in Fort Bend County, Texas ([Renewable Energy World, 2024](https://www.renewableenergyworld.com/solar/utility-scale/texas-hailstorm-damages-thousands-of-solar-panels-at-350-mw-farm/); [VDE Americas, 2025](https://www.vde.com/en/vde-americas/newsroom/250114-reevaluating-fighting-jays)). Shattered glass is easy to see after a storm like that, but a module with intact glass can still carry cracked cells, and every module that comes off a damaged array needs a call: back on the rack, resale, or recycling. A glance or a single voltage reading cannot make that call; an IV curve taken at the module, with the result logged, can. PVTrace is sized for that job: one module or a short string at a time, on the ground next to the array or at a reuse yard.
 
 ## Problem
 
@@ -57,11 +57,11 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 ## Concept
 
-A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 6.6 mF capacitor bank in about 20 to 68 ms (calculated) while the tracer samples 400 or more voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). A digital isolator separates the measurement side from the controller and USB port. The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. Calculated mass is about 1.41 kg, battery life about 10 h, and parts cost $163.
+A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 6.6 mF capacitor bank in about 20 to 68 ms (calculated) while the tracer samples 400 or more voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). A digital isolator separates the measurement side from the controller and USB port. The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. A printed sun hood shades the display. Calculated mass is about 1.43 kg, battery life about 10 h, and parts cost $164 against the $165 budget.
 
-Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md)
+Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md), [docs/decisions/0002-recommendations-accepted.md](docs/decisions/0002-recommendations-accepted.md)
 
-Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance, sunlight readability of the display, insulation screening of second-life modules (out of scope; use an insulation tester alongside), and cost against the $150 budget ($163; a $165 budget is proposed, awaiting Amish). Details are in the [review note](docs/REVIEW.md).
+Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance, sunlight readability of the display (a sun hood is now fitted, but readability cannot be shown until a field check), and insulation screening of second-life modules (out of scope; use an insulation tester alongside). Cost is now met: $164 against the $165 budget Amish set on 2026-09-25. Details are in the [review note](docs/REVIEW.md).
 
 ## Key components
 
@@ -72,7 +72,7 @@ Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules
 - ESP32 controller with 2.8 in display, microSD logging and Wi-Fi export
 - 20 A DC fuse, 2-pole DC isolator and MC4 test leads
 - Protected 18650 Li-ion cell with USB-C charging and a temperature cut-off
-- IP54 light grey handheld case, about 220 x 130 x 80 mm
+- IP54 light grey handheld case, about 220 x 130 x 80 mm, with a printed display sun hood
 
 The priced bill of materials is in [bom/bom.csv](bom/bom.csv); the parametric model is `cad/src/model.py`, with STEP and STL exports in `cad/step` and `cad/stl`.
 
@@ -103,4 +103,4 @@ Controlled documents follow the portfolio [documentation standard](.kit/STANDARD
 - **Hardware** (CAD, drawings, BOM, electronics): [CERN-OHL-S v2](LICENSE)
 - **Software** (firmware, scripts, notebooks): [MIT](LICENSE-SOFTWARE)
 
-A project of the [Design Molecule](https://designmolecule.com) lab. Extending strong areas set.
+A project of the [Design Molecule](https://designmolecule.com) lab.

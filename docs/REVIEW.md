@@ -34,7 +34,9 @@ Requirements not met or at risk:
 - **R16 insulation screening not met**; it is out of scope for this instrument, and second-life resale also needs an insulation test.
 - **R8 at risk** until the reference cell calibration route (item 6) is chosen; R5 to R7 and R9 are unverified.
 
-### Proposed, awaiting Amish
+### Proposed at TRL 2
+
+Items 1 to 9 and 11: Decided by Amish, 2026-09-25: go with recommendation (PVT-DDR-002). Item 10: still proposed, awaiting Amish.
 
 1. **Load type.** Capacitive (recommended), electronic MOSFET load, or relay-switched resistor bank.
 2. **Rating.** 100 V, 20 A (recommended; stays below the 120 V DC extra-low-voltage limit), 60 V, 15 A single-module only, or high-voltage strings (not recommended).
@@ -44,7 +46,7 @@ Requirements not met or at risk:
 6. **Irradiance reference.** Reference cell calibrated once against a pyranometer (recommended), silicon pyranometer, or known-good module.
 7. **Controller.** ESP32 display board (recommended) or RP2040 with a separate display.
 8. **Grade thresholds.** A 90 % or more of nameplate, B 80 to 90 %, C 70 to 80 %, reject below 70 % or with a visible safety defect; to be agreed with a partner.
-9. **Budget.** Items 3 and 4 together take parts to about $163. Proposed: raise `budget_usd` from 150 to 165, awaiting Amish. No change made to `project.yaml`.
+9. **Budget.** Items 3 and 4 together take parts to about $163. Proposed: raise `budget_usd` from 150 to 165. Decided by Amish, 2026-09-25: go with recommendation; `budget_usd` is now 165.
 10. **First partner** for co-design: a second-life panel refurbisher or recycler, or a TVET solar course.
 11. `pitch` and `problem` in `project.yaml` were left unchanged; the evidence supports them.
 
@@ -73,7 +75,7 @@ Review this note and the media, then decide items 2 to 4, 6 and 9. If approved, 
 
 ### What was done
 
-- `docs/decisions/0001-trl2-review-decisions.md` (PVT-DDR-001 v0.1): items 1 to 8 of the TRL 2 review are adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review; items 9 to 13 stay open.
+- `docs/decisions/0001-trl2-review-decisions.md` (PVT-DDR-001 v0.1): items 1 to 8 of the TRL 2 review were adopted for TRL 3 pending Amish's review; items 9 to 13 stayed open. (Since then Decided by Amish, 2026-09-25: go with recommendation for items 1 to 9, 12 and 13; see PVT-DDR-002.)
 - `docs/04-calcs/01-sizing.md` (PVT-CAL-001 v0.1) with `docs/04-calcs/sizing.py` and `docs/04-calcs/results.csv`: single-diode sweep model with loop resistance and capacitor tolerance, range and cold Voc, resolution and error budget, STC uncertainty, discharge and opening current, heat in sun, battery, mass and cost. The script reads `cad/src/model.py` and `bom/bom.csv`.
 - `cad/src/model.py`: parametric build123d model (case, lid and window, controller, measurement board, isolation board, three capacitors, MOSFET bar, dump resistor, fuse, isolator, battery, lead stubs, sensor pod) with an interference check (no clashes). Exports `cad/step/` and `cad/stl/` for the assembly, the enclosure and the sensor pod.
 - `cad/src/sheets.py` and `cad/drawings/PVT-DWG-001` (SVG, PDF, PNG): general arrangement at Rev P1, marked "CONCEPT, NOT FOR FABRICATION" and "PRELIMINARY, NOT FOR FABRICATION". The concept blueprint keeps PVT-DWG-010, so DWG-001 was free.
@@ -99,15 +101,15 @@ Corrections to TRL 2 figures: stored energy at 100 V is now 33 J (6.6 mF); batte
 
 ### Decisions recorded
 
-Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review: capacitive load; 100 V, 20 A rating; 6.6 mF; isolation option B; 2.8 in TFT plus phone export; once-calibrated reference cell; ESP32 controller; grade thresholds A 90 %, B 80 %, C 70 %. Pitch and problem are unchanged, as the TRL 2 review recommended.
+Decided by Amish, 2026-09-25: go with recommendation (was adopted for TRL 3 pending his review): capacitive load; 100 V, 20 A rating; 6.6 mF; isolation option B; 2.8 in TFT plus phone export; once-calibrated reference cell; ESP32 controller; grade thresholds A 90 %, B 80 %, C 70 %. Pitch and problem are unchanged, as the TRL 2 review recommended.
 
-### Still awaiting Amish
+### Still awaiting Amish (as of the TRL 3 session)
 
-- Budget: $165 recommended; `budget_usd` stays 150 (PVT-DDR-001 item 9).
-- First co-design partner: no preference stated (item 10).
-- R3 at tolerance: fourth capacitor, capacitor selection, or relaxing the bound (item 11, no recommendation yet).
-- Heat and sun: sun hood for the display (item 12).
-- Larger case, 220 x 130 x 80 mm (item 13).
+- Budget: $165 recommended (PVT-DDR-001 item 9). Decided by Amish, 2026-09-25: go with recommendation; `budget_usd` now 165.
+- First co-design partner: no preference stated (item 10). Still proposed, awaiting Amish.
+- R3 at tolerance: fourth capacitor, capacitor selection, or relaxing the bound (item 11, no recommendation yet). Still proposed, awaiting Amish.
+- Heat and sun: sun hood for the display (item 12). Decided by Amish, 2026-09-25: go with recommendation; hood added.
+- Larger case, 220 x 130 x 80 mm (item 13). Decided by Amish, 2026-09-25: go with recommendation.
 
 ### Safety concerns
 
@@ -128,3 +130,36 @@ Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for 
 ### Recommended next step
 
 TRL 4 is on hold by Amish's instruction. Review PVT-DDR-001 and decide items 9 to 13, especially the budget and the R3 option. For the record only, TRL 4 would need a bench prototype, a lab test report (TST, `environment: lab`) covering sweep time against a known module, discharge, accuracy against a calibrated meter and isolation, and build log entries.
+
+## Session 2026-09-25: recommendations accepted
+
+### Decisions applied
+
+Amish wrote on 2026-09-25: "i accept all your recommendations, go with them across all repos." Twelve PVTrace items are now "Decided by Amish, 2026-09-25: go with recommendation", recorded in `docs/decisions/0002-recommendations-accepted.md` (PVT-DDR-002 v0.1), with statuses updated in PVT-DDR-001 v0.2:
+
+- Items 1 to 8 (capacitive load; 100 V, 20 A; 6.6 mF; isolation option B; TFT plus phone export; once-calibrated reference cell; ESP32; grade thresholds A 90 %, B 80 %, C 70 %) and item 13 (220 x 130 x 80 mm case): already in the design; status wording only.
+- Item 9, budget: `budget_usd` in `project.yaml` from **150 to 165**. R17 from not met ($163 against $150) to **met** ($164 against $165, $1 margin).
+- Item 12, heat and sun: printed PETG display sun hood added as `bom/bom.csv` line 15 ($1.00). Parts **$163 to $164**; mass **1.41 to 1.43 kg** (R12 still met); hood top at 98 mm, level with the isolator knob, so the envelope is unchanged. Model (`cad/src/model.py`, no clashes), STEP and STL, PVT-DWG-001 **Rev P1 to P2**, concept media (callout 15, blueprint PVT-DWG-010 Rev P3) and PVT-CAL-001 **v0.1 to v0.2** updated.
+- TRL 2 note item 11: `pitch` and `problem` unchanged, as recommended.
+
+Documents bumped: PVT-PRB-001 v0.4, PVT-PRC-001 v0.4, PVT-REQ-001 v0.4, PVT-CAL-001 v0.2, PVT-DDR-001 v0.2. README: budget line, concept paragraph, not-met list, and a rewritten "What sparked the idea" (the March 2024 Fighting Jays hailstorm in Fort Bend County, Texas, cited). The old personal-site domain in generated files was replaced with designmolecule.com by re-rendering all PDFs, the drawing and the media.
+
+### Requirement status (PVT-CAL-001 v0.2)
+
+- **Not met (3):** R3 sweep time at -20 % capacitor tolerance (16.4 ms against 20 ms); R13 display readability in sun (sun hood fitted; readability can only be shown in a field check), heat at risk (about 56 °C inside at 45 °C in sun); R16 insulation screening (out of scope).
+- **At risk (2):** R7, R8 (reference cell calibration within ±4.5 %).
+- **Not verifiable at TRL 3 (2):** R6, R9.
+- **Met (10):** R1, R2, R4, R5, R10, R11, R12 (1.43 kg), R14 (10.3 h), R15, R17 ($164 of $165).
+
+### Still awaiting Amish
+
+- Item 10, first co-design partner: no preference stated.
+- Item 11, R3 at worst-case tolerance: fourth capacitor (about +$6, which would break the $165 budget), capacitor selection, or relaxing the 20 ms bound. No recommendation was made.
+
+### Cross-repo actions
+
+None for PVTrace. The CalRig temperature range limit (10 to 40 °C) remains a note, not a requested change.
+
+### TRL 4
+
+TRL 4 remains on hold by Amish's instruction. `trl: 3` and `trl_target: 3` are unchanged. The reference cell calibration and the display readability field check follow from the decisions but are TRL 4 work and were not started.

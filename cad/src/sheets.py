@@ -1,4 +1,4 @@
-"""PVTrace general arrangement drawing PVT-DWG-001 (Rev P1).
+"""PVTrace general arrangement drawing PVT-DWG-001 (Rev P2).
 
 Run from the repo root:  python cad/src/sheets.py
 Builds cad/drawings/PVT-DWG-001.svg, .pdf and .png from the parametric model.
@@ -20,9 +20,10 @@ work = ROOT / "cad/drawings/_views"
 views = project_views(asm, work)
 
 s = Sheet(project="PVTrace", title="General arrangement, handheld tracer", dwg_no="PVT-DWG-001",
-          rev="P1", author="Amish Chadha", date="2026-09-25", concept=True,
-          material="Case IP54 ABS, light grey; window 3 mm PC. See bom/bom.csv and PVT-CAL-001",
-          revisions=[("P1", "Preliminary GA, 6.6 mF and isolation barrier (PVT-DDR-001)", "2026-09-25", "AC")])
+          rev="P2", author="Amish Chadha", date="2026-09-25", concept=True,
+          material="Case IP54 ABS, light grey; window 3 mm PC; hood PETG. See bom/bom.csv and PVT-CAL-001",
+          revisions=[("P1", "Preliminary GA, 6.6 mF and isolation barrier (PVT-DDR-001)", "2026-09-25", "AC"),
+                     ("P2", "Display sun hood added (PVT-DDR-002)", "2026-09-25", "AC")])
 s.add_ortho(views, ["front", "top", "right"])
 s.add_svg(views["iso"], 276, 30, 140, 84, label="Isometric view", sublabel="Not to scale")
 s.add_notes("Key dimensions and interfaces (mm)", [
@@ -33,9 +34,10 @@ s.add_notes("Key dimensions and interfaces (mm)", [
     f"Load: {P['n_caps']} x 2200 uF 160 V, 6.6 mF, along Y on floor",
     "Isolation board between measurement side and controller",
     f"Display window {P['window'][0]:.0f} x {P['window'][1]:.0f} over controller",
+    f"Sun hood {P['hood_in'][0] + 2 * P['hood_wall']:.0f} x {P['hood_in'][1] + 2 * P['hood_wall']:.0f} x {P['hood_h']:.0f}, open to -Y; top Z 98",
     "Rating 100 V DC, 20 A; 20 A gPV fuse; 2-pole DC isolator",
     "Stored energy up to 33 J; dump 22 ohm, bleed 10 kohm",
-    "Mass about 1.41 kg with leads and pod (PVT-CAL-001)",
+    "Mass about 1.43 kg with leads and pod (PVT-CAL-001)",
     "Sensor pod 100 x 70 x 22 plus frame clip: see STEP",
     "PRELIMINARY, NOT FOR FABRICATION",
 ], x=276, y=128, width=140)

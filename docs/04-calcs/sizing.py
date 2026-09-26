@@ -267,7 +267,7 @@ res("R8", f"±{u_lo * 100:.1f} to ±{u_hi * 100:.1f} % (needs reference cell wit
     "±5 % or better", "At risk")
 res("R9", f"{min(s['ppv'] for s in sweeps.values()):.0f} or more samples per volt; rules drafted",
     "Flags within 5 s", "Not verifiable at TRL 3")
-res("R10", "A, B, C, reject thresholds adopted for TRL 3; editable table", "Partner-editable grades", "Met (design review)")
+res("R10", "A, B, C, reject thresholds decided (PVT-DDR-002); editable table", "Partner-editable grades", "Met (design review)")
 
 # ------------------------------------------------------------------ 5. Discharge and heat (R11, R13)
 tau_a, tau_p = R_DUMP * C_LOAD, R_BLEED * C_LOAD
@@ -303,7 +303,7 @@ for label, alpha in (("light", ALPHA_LIGHT), ("dark", ALPHA_DARK)):
         thermal[(label, rate_label)] = T_AMB + q / ha
         print(f"  {label} case, {rate_label}: {q:.1f} W, inside about {T_AMB + q / ha:.0f} °C at {T_AMB:.0f} °C ambient")
 res("R13", f"Inside about {thermal[('light', 'reference rate')]:.0f} °C (light case) to {thermal[('dark', 'reference rate')]:.0f} °C "
-           f"(dark) at 45 °C in sun; TFT not sun-readable; IP54 case", "0 to 45 °C, sun, IP54, readable",
+           f"(dark) at 45 °C in sun; TFT with sun hood, readability unproven; IP54 case", "0 to 45 °C, sun, IP54, readable",
     "Not met (display); at risk (heat)")
 
 # ------------------------------------------------------------------ 6. Battery (R14)
@@ -325,6 +325,7 @@ MASS = {
     "Fuse and holder": 40, "DC isolator": 120, "Battery, holder, charger": 72,
     "Test leads, 2 x 1 m 4 mm2 with MC4": 2 * (4e-6 * 8960 * 1e3 + 25) + 4 * 10,
     "Sensor pod with 3 m cable": 150, "Isolation board": 10, "Hardware and consumables": 50,
+    "Display sun hood, PETG 10.5 cm3 at 1.27 g/cm3, with screws": 10.5 * 1.27 + 2,   # PVT-DDR-002 item 12
 }
 mass = sum(MASS.values())
 print("\nMass (g)")
@@ -339,9 +340,10 @@ res("R12", f"{mass / 1e3:.2f} kg; {env[0]:.0f} x {env[1]:.0f} x {MP['case_h']:.0
 
 rows = list(csv.DictReader((ROOT / "bom/bom.csv").open()))
 total = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in rows)
-print(f"\nBOM total ${total:.2f}: against $150 (project.yaml) margin ${150 - total:.2f}; "
-      f"against $165 (proposed, awaiting Amish) margin ${165 - total:.2f}")
-res("R17", f"${total:.0f} in parts", "$150 or less (proposed $165)", "Not met at $150; met at proposed $165")
+BUDGET, BUDGET_OLD = 165.0, 150.0   # project.yaml budget_usd, raised from 150 by Amish's decision (PVT-DDR-002 item 9)
+print(f"\nBOM total ${total:.2f}: against ${BUDGET:.0f} (project.yaml) margin ${BUDGET - total:.2f}; "
+      f"against the former ${BUDGET_OLD:.0f} over by ${total - BUDGET_OLD:.2f}")
+res("R17", f"${total:.0f} in parts", f"${BUDGET:.0f} or less", "Met" if total <= BUDGET else "Not met")
 
 # ------------------------------------------------------------------ output
 order = [f"R{i}" for i in range(1, 18)]

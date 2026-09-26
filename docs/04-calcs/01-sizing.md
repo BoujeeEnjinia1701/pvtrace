@@ -3,7 +3,7 @@ doc_id: PVT-CAL-001
 title: PVTrace sizing calculations
 project: PVTrace
 doc_type: Calculation note
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -13,13 +13,19 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: First TRL 3 sizing note (sweep model, range, resolution, error budget, STC uncertainty, discharge, heat, battery, mass, cost) for the 6.6 mF isolated design in PVT-DDR-001
+- version: "0.2"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # PVTrace sizing calculations
 
-On paper, PVTrace meets nine of its seventeen requirements (R1, R2, R4, R5, R10, R11, R12, R14, R15). Four are **not met**: R3 (sweep time) at worst-case capacitor tolerance, R13 (display readability in sun, with heat at risk), R16 (insulation screening, out of scope) and R17 (cost against the $150 budget in `project.yaml`). R7 and R8 are **at risk** because they rest on the reference cell calibration, and R6 and R9 cannot be verified until hardware exists.
+On paper, PVTrace meets ten of its seventeen requirements (R1, R2, R4, R5, R10, R11, R12, R14, R15, R17). Three are **not met**: R3 (sweep time) at worst-case capacitor tolerance, R13 (display readability in sun, not shown even with the sun hood, with heat at risk) and R16 (insulation screening, out of scope). R7 and R8 are **at risk** because they rest on the reference cell calibration, and R6 and R9 cannot be verified until hardware exists.
 
 Three TRL 2 figures change. With the third capacitor (6.6 mF, PVT-DDR-001 decision 3) the high-current module sweeps in 20.5 ms at nominal capacitance but only 16.4 ms at the -20 % tolerance of electrolytic capacitors, so R3 is still not met in the worst case. The stored energy at 100 V rises from 22 J to 33 J. Battery life falls from about 16 h to 10.3 h once the isolation barrier (decision 4) and a 5 V boost are counted; R14 is still met. The module current at 99 % of Voc is up to 2.5 A, so the load switch must stay closed a few milliseconds past the end of the sweep to open below 0.5 A (R11).
+
+Version 0.2 applies Amish's decisions of 2026-09-25 (PVT-DDR-002): the budget in `project.yaml` rises from $150 to $165, and a printed display sun hood (BOM line 15, +$1, about 15 g) is added. The parts total goes from $163 to $164, so R17 changes from not met to met with a $1 margin. Mass goes from 1.41 kg to 1.43 kg (R12 still met); the hood top is level with the isolator knob at 98 mm, so the envelope does not change. No other result changes.
 
 Every number here is printed by `docs/04-calcs/sizing.py` (run from the repo root: `python docs/04-calcs/sizing.py`), which also writes `docs/04-calcs/results.csv`. The script reads the case dimensions from `cad/src/model.py` and the costs from `bom/bom.csv`. All values are first-principles estimates for a paper design; nothing is measured.
 
@@ -100,7 +106,7 @@ Table 4. Inside temperature, lumped model
 | Light grey (absorptance 0.30) | 11.0 W, about 56 °C | 16.0 W, about 61 °C |
 | Dark (absorptance 0.90) | 28.2 W, about 73 °C | 33.2 W, about 78 °C |
 
-Solar gain on the lid dominates. Even a light case reaches about 56 °C inside, above the usual 45 °C charging limit of a Li-ion cell and close to the limits of commodity display boards. The design therefore needs a light-colored case, a charger with a temperature cut-off (added to `bom/bom.csv` line 10), and the advice to keep the tracer in shade between sweeps. A sun hood over the display is proposed in PVT-DDR-001 as an open item. Display readability in direct sun is **not met** with the adopted TFT (decision 5).
+Solar gain on the lid dominates. Even a light case reaches about 56 °C inside, above the usual 45 °C charging limit of a Li-ion cell and close to the limits of commodity display boards. The design therefore needs a light-colored case, a charger with a temperature cut-off (added to `bom/bom.csv` line 10), and the advice to keep the tracer in shade between sweeps. A printed sun hood over the display is now fitted (PVT-DDR-002 item 12). It shades the window on three sides and from above; its small shading of the lid is ignored here, so the figures above stay conservative. Display readability in direct sun is still **not met** on paper: a hood improves contrast but readability of the adopted TFT (decision 5) can only be shown in a field check, which is TRL 4 work.
 
 ## 6. Battery (R14)
 
@@ -123,11 +129,12 @@ Table 5. Mass estimate
 | Dump and bleed resistors | 45 |
 | Measurement board; MOSFETs and bar; fuse and holder | 40 each |
 | Window and gasket; isolation board | 10 each |
-| **Total** | **1,410** |
+| Display sun hood, PETG, with screws | 15 |
+| **Total** | **1,426** |
 
-R12 is met: 1.41 kg against 1.5 kg. The case grows from 200 x 120 x 75 mm to 220 x 130 x 80 mm to fit the third capacitor and the isolation board with no clashes (the model checks this). Over the bumpers it is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob, inside 250 x 150 x 100 mm.
+R12 is met: 1.43 kg against 1.5 kg. The case grows from 200 x 120 x 75 mm to 220 x 130 x 80 mm to fit the third capacitor and the isolation board with no clashes (the model checks this). Over the bumpers it is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob, inside 250 x 150 x 100 mm.
 
-The priced BOM totals **$163.00**. Against the $150 in `project.yaml` that is $13 over, so **R17 is not met**. Against the $165 recommended in the TRL 2 review (proposed, awaiting Amish; `budget_usd` is unchanged) the margin is $2. The increase is the third capacitor ($6) and the isolation barrier ($8), less $1 of rounding in the TRL 2 total.
+The priced BOM totals **$164.00**. Against the $165 in `project.yaml` (raised from $150 by Amish on 2026-09-25, PVT-DDR-002 item 9) the margin is $1, so **R17 is met**. The increase over TRL 2 is the third capacitor ($6), the isolation barrier ($8) and the sun hood ($1), less $1 of rounding in the TRL 2 total.
 
 ## 8. Results
 
@@ -144,13 +151,13 @@ Table 6. Requirement status (from `docs/04-calcs/results.csv`)
 | R7 | Irradiance ±3.6 to ±5.4 %; temperature ±2 °C budget | ±5 %, ±2 °C | At risk |
 | R8 | ±3.7 to ±5.4 % (needs reference cell within ±4.5 %) | ±5 % or better | At risk |
 | R9 | About 7 or more samples per volt; rules drafted | Flags within 5 s | Not verifiable at TRL 3 |
-| R10 | A, B, C, reject thresholds adopted for TRL 3; editable table | Partner-editable grades | Met (design review) |
+| R10 | A, B, C, reject thresholds decided (PVT-DDR-002); editable table | Partner-editable grades | Met (design review) |
 | R11 | 30 V in 0.21 s; 60 V passive in 40 s; opens below 0.5 A after up to 6 ms more | 30 V in 2 s; 60 V in 60 s; open below 0.5 A | Met |
-| R12 | 1.41 kg; 234 x 144 x 80 mm over bumpers | 1.5 kg; 250 x 150 x 100 mm | Met |
-| R13 | Inside about 56 °C (light case) to 73 °C (dark) at 45 °C in sun; TFT not sun-readable; IP54 case | 0 to 45 °C, sun, IP54, readable | **Not met** (display); at risk (heat) |
+| R12 | 1.43 kg; 234 x 144 x 80 mm over bumpers | 1.5 kg; 250 x 150 x 100 mm | Met |
+| R13 | Inside about 56 °C (light case) to 73 °C (dark) at 45 °C in sun; TFT with sun hood, readability unproven; IP54 case | 0 to 45 °C, sun, IP54, readable | **Not met** (display); at risk (heat) |
 | R14 | 10.3 h, about 1,853 sweeps | 8 h or 200 sweeps | Met |
 | R15 | CSV fields defined in PVT-PRC-001; no firmware at TRL 3 | CSV per sweep, USB or Wi-Fi export | Met (design review) |
 | R16 | No insulation test in this instrument | Detect insulation faults | **Not met** (out of scope) |
-| R17 | $163 in parts | $150 or less (proposed $165) | **Not met** at $150; met at proposed $165 |
+| R17 | $164 in parts | $165 or less | Met |
 
 > **Safety:** These calculations cover a live DC instrument at up to 100 V and 20 A that stores up to 33 J. The discharge times assume both the active and passive paths are fitted and working; never rely on one alone, and treat the capacitors as charged until the display reads below 30 V. The heat results show the Li-ion cell can exceed its charging limit in sun; charge only in shade with the isolator open.

@@ -9,6 +9,7 @@ trl_evidence:
   - docs/02-concept.md
   - docs/03-requirements.md
   - docs/decisions/0001-trl2-review-decisions.md
+  - docs/decisions/0002-recommendations-accepted.md
   - docs/04-calcs/01-sizing.md
   - docs/04-calcs/sizing.py
   - docs/04-calcs/results.csv
@@ -25,7 +26,7 @@ pitch: >-
   A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
 problem: >-
   Installers and reuse programs judge panels by eye or by a single voltage reading, missing faults that an IV curve shows at once. Commercial tracers cost thousands.
-budget_usd: 150
+budget_usd: 165
 difficulty: 3  # 1 easiest, 5 hardest
 hero_image: media/hero.png
 licenses:

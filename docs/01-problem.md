@@ -3,7 +3,7 @@ doc_id: PVT-PRB-001
 title: PVTrace problem statement
 project: PVTrace
 doc_type: Problem statement
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Budget constraint notes the proposed $165 (PVT-DDR-001); WEEE coverage of PV panels confirmed against the directive text
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # PVTrace problem statement
@@ -57,7 +61,7 @@ The gap PVTrace addresses is a handheld, battery-powered, open tracer that works
 
 ## Constraints
 
-- Garage-buildable prototype, about $150 USD in parts (`project.yaml` budget). The TRL 3 design costs $163; a rise to $165 is proposed, awaiting Amish (PVT-DDR-001).
+- Garage-buildable prototype, about $165 USD in parts (`project.yaml` budget, raised from $150 by Amish on 2026-09-25, PVT-DDR-002). The TRL 3 design costs $164.
 - Off-the-shelf parts and hand tools; no custom machining.
 - Voltage kept below 120 V DC, the extra-low-voltage limit for ripple-free DC in IEC 61140 ([summary](https://en.wikipedia.org/wiki/Extra-low_voltage)). Full strings at 600 to 1,500 V are out of scope.
 - Works in full sun at up to 45 °C ambient, with no mains power.

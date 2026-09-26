@@ -3,7 +3,7 @@ doc_id: PVT-PRC-001
 title: PVTrace design precis
 project: PVTrace
 doc_type: Design precis
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,15 +21,19 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: TRL 3 update; design choices adopted per PVT-DDR-001 (6.6 mF, isolation barrier, TFT, reference cell, ESP32, grades); numbers from PVT-CAL-001; larger case; 33 J safety figure
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # PVTrace design precis
 
 ## Summary
 
-PVTrace is a handheld, battery-powered IV curve tracer for single PV modules and short strings up to 100 V and 20 A. It sweeps the module from short circuit to open circuit by letting it charge a 6.6 mF capacitor bank in about 20 to 68 ms, samples several hundred voltage and current pairs, reads irradiance from a reference cell and temperature from a probe on the module back, translates the curve to standard test conditions (STC) and shows fault flags and a second-life grade on its screen. A digital isolator and an isolated DC-DC converter separate the measurement side from the controller and USB port. Every sweep is saved as an open CSV file. Parts cost $163 (indicative), $13 over the $150 budget; a rise to $165 is proposed, awaiting Amish. The capacitive load follows proven open designs (IV Swinger 2; Cáceres et al., 2020, see PVT-PRB-001); what is new is a standalone field instrument with sensing, translation and a transparent grading rule.
+PVTrace is a handheld, battery-powered IV curve tracer for single PV modules and short strings up to 100 V and 20 A. It sweeps the module from short circuit to open circuit by letting it charge a 6.6 mF capacitor bank in about 20 to 68 ms, samples several hundred voltage and current pairs, reads irradiance from a reference cell and temperature from a probe on the module back, translates the curve to standard test conditions (STC) and shows fault flags and a second-life grade on its screen. A digital isolator and an isolated DC-DC converter separate the measurement side from the controller and USB port. Every sweep is saved as an open CSV file. Parts cost $164 (indicative) against the $165 budget. The capacitive load follows proven open designs (IV Swinger 2; Cáceres et al., 2020, see PVT-PRB-001); what is new is a standalone field instrument with sensing, translation and a transparent grading rule.
 
-The design choices in this precis were adopted as recommended for TRL 3 work under Amish's 2026-09-25 instruction and remain open for his review (PVT-DDR-001). Sizing is in PVT-CAL-001; the general arrangement is drawing PVT-DWG-001.
+The design choices in this precis were decided by Amish on 2026-09-25 (go with recommendation; PVT-DDR-001 and PVT-DDR-002). Sizing is in PVT-CAL-001; the general arrangement is drawing PVT-DWG-001.
 
 ![Figure 1. PVTrace in use: the tracer on the ground, test leads mated to the module's own MC4 leads and the sensor pod clipped to the lower frame edge.](../media/hero.png)
 
@@ -71,6 +75,7 @@ Table 1. Main components
 | 12 | Sensor pod: reference cell and shaded temperature probe, frame clip, 3 m cable | Measures irradiance and module temperature |
 | 13 | Hardware and consumables (not modeled) | Screws, standoffs, wire, gaskets |
 | 14 | Isolation barrier: 4-channel digital isolator and 1 W isolated DC-DC converter | Separates the PV-side measurement board from the controller, USB port and battery |
+| 15 | Display sun hood, printed light grey PETG, 86 x 64 x 18 mm, three walls and a 20 mm roof lip, open toward the user | Shades the display window to improve contrast in sun (PVT-DDR-002 item 12) |
 
 ![Figure 3. Exploded view with BOM callouts.](../media/exploded.png)
 
@@ -102,10 +107,10 @@ Assumptions: datasheet-class values; 56.6 mΩ loop resistance; module capacitanc
 - **Discharge.** 22 ohm with 6.6 mF gives a 145 ms time constant: 100 V falls below 30 V in 0.21 s with +20 % capacitance. Peak dump power is 455 W for milliseconds; at one sweep every 5 s the average is 1.6 W for the reference module and 6.6 W at 100 V. The 10 kohm bleed takes 100 V below 60 V in 40 s and draws 10 mA at 100 V, which firmware subtracts.
 - **Opening current.** At 99 % of Voc the module still delivers up to 2.5 A, so the load switch stays closed up to 6 ms longer until the current is below 0.5 A.
 - **Battery.** 0.85 W at 5 V (controller, display and isolated side), 0.94 W from the cell: about 10.3 h from a 3,000 mAh 18650.
-- **Heat.** In full sun at 45 °C ambient the inside of a light grey case reaches about 56 °C, a dark case about 73 °C. The case is therefore light grey, the charger has a temperature cut-off, and the tracer should stay in shade between sweeps.
+- **Heat.** In full sun at 45 °C ambient the inside of a light grey case reaches about 56 °C, a dark case about 73 °C. The case is therefore light grey, the charger has a temperature cut-off, a printed hood shades the display, and the tracer should stay in shade between sweeps.
 - **STC uncertainty.** Root-sum-square ±3.7 to ±5.4 %; R8 (±5 %) needs a reference cell calibrated within ±4.5 %.
-- **Mass.** About 1.41 kg with leads and sensor pod.
-- **Cost.** $163 in parts (see `bom/bom.csv`), against the $150 budget; $165 proposed, awaiting Amish.
+- **Mass.** About 1.43 kg with leads, sensor pod and sun hood.
+- **Cost.** $164 in parts (see `bom/bom.csv`), against the $165 budget set by Amish on 2026-09-25 (R17 met, $1 margin).
 
 ## Fault flags and grading (draft rules)
 
@@ -119,22 +124,22 @@ Table 3. Draft fault rules
 | Current deficit (soiling, degradation, cracks) | Isc low against irradiance | Isc at STC below 90 % of nameplate |
 | Missing substring | Voc about one third low | Voc at STC below 70 % of nameplate |
 
-Grades from STC Pmax against nameplate (adopted for TRL 3, PVT-DDR-001 item 8): A 90 % or more, B 80 to 90 %, C 70 to 80 %, reject below 70 % or with any safety defect found by visual inspection (broken glass, burnt junction box, delaminated backsheet). Grades are indicative; they are not a certification.
+Grades from STC Pmax against nameplate (decided by Amish, PVT-DDR-001 item 8): A 90 % or more, B 80 to 90 %, C 70 to 80 %, reject below 70 % or with any safety defect found by visual inspection (broken glass, burnt junction box, delaminated backsheet). Grades are indicative; they are not a certification.
 
 ## Key design choices
 
-Items 1 to 8 were adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction and are open for his review (PVT-DDR-001). The options considered are in PVT-PRC-001 v0.2 and `docs/REVIEW.md`.
+Items 1 to 8 were decided by Amish on 2026-09-25: go with recommendation (PVT-DDR-001, PVT-DDR-002). The options considered are in PVT-PRC-001 v0.2 and `docs/REVIEW.md`.
 
 1. **Load type.** Capacitive load: simple, fast, low heat, proven in open designs.
 2. **Voltage and current rating.** 100 V, 20 A: single modules and two in series, below the 120 V DC extra-low-voltage limit. Two 450 W modules in series exceed it when cold and are refused.
 3. **Load capacitance.** 6.6 mF with three capacitors. It meets R3 at nominal capacitance but not at -20 % tolerance (open item 11).
 4. **Isolation of the controller from the PV side.** Option B: a digital isolator and isolated DC-DC converter between the measurement board and the controller, so a laptop on USB is not tied to PV potential.
-5. **Display and interface.** 2.8 in TFT plus phone export. Readability in direct sun remains not met (R13); a sun hood is an open proposal (item 12).
+5. **Display and interface.** 2.8 in TFT plus phone export. A printed sun hood is fitted (item 12, decided); readability in direct sun is still not shown on paper (R13).
 6. **Irradiance sensing.** A small reference cell measured at short circuit and calibrated once against a pyranometer.
 7. **Controller.** ESP32 display board.
 8. **Grade thresholds.** As in the grading rules above, held in an editable table and still to be agreed with a second-life partner.
 
-Still proposed, awaiting Amish: the budget ($165 recommended), the first co-design partner, the R3 shortfall at tolerance, the sun hood and the larger case (PVT-DDR-001 items 9 to 13).
+Also decided by Amish on 2026-09-25: the $165 budget, the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Still proposed, awaiting Amish: the first co-design partner (item 10, no preference stated) and the R3 shortfall at tolerance (item 11, no recommendation yet).
 
 ## Links to other lab projects
 
@@ -161,6 +166,6 @@ Still proposed, awaiting Amish: the budget ($165 recommended), the first co-desi
 - [ ] Is 20 ms the right lower bound on sweep time for TOPCon and HJT modules, or is a longer sweep needed?
 - [x] How to capture true Isc: extrapolate from the first samples, which start 1 to 2 % of Voc above zero (PVT-CAL-001); no negative pre-charge.
 - [ ] Which reference cell and calibration route give ±3 % or better at low cost?
-- [ ] Can a commodity TFT be made readable in sun with a hood, or is a transflective display needed?
+- [ ] Is a commodity TFT with the sun hood readable in sun, or is a transflective display needed? (Field check, TRL 4.)
 - [ ] What grade label format would buyers and a certification scheme accept?
 - [ ] Should the firmware support two modules in parallel (current to 20 A at lower voltage) as well as in series?

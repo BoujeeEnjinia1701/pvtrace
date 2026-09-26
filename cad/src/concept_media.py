@@ -119,16 +119,17 @@ parts = [
     Part("Test leads with MC4 connectors", leads, "#111827", 11, scr(250, 0)),
     Part("Sensor pod: reference cell, temperature", pod_all, "#0EA5E9", 12, scr(-40, -470)),
     Part("Isolation barrier (isolator, DC-DC)", M["isolation"], "#DB2777", 14, scr(40, 240)),
+    Part("Display sun hood, printed", M["hood"], "#E5E7EB", 15, (0, 0, 470)),
 ]
 
 if __name__ == "__main__":
     render_all(
-        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P2",
+        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P3",
         key_figures=["Single modules and short strings to 100 V, 20 A",
                      "Capacitive load 6.6 mF: sweep about 20 to 68 ms (PVT-CAL-001)",
                      "Up to 33 J per sweep dumped in a 50 W resistor",
-                     "Case 220 x 130 x 80 mm; about 1.41 kg; isolated measurement side",
-                     "$163 in parts (indicative; budget $150, $165 proposed)"],
+                     "Case 220 x 130 x 80 mm with sun hood; about 1.43 kg; isolated",
+                     "$164 in parts (indicative; budget $165)"],
         scale_figure=False, context=context,
         cut_exclude=("Test leads with MC4 connectors", "Sensor pod: reference cell, temperature"),
         flow={"title": "one sweep, from panel to grade (calculated in PVT-CAL-001; energy in J for a 450 W module)", "unit": "J",
