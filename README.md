@@ -1,20 +1,20 @@
 # PVTrace
 
-![TRL 2](https://img.shields.io/badge/TRL-2%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
+![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** CleanTech · **TRL:** 2 of 9 (concept formulated) · **Prototype budget:** about $150 USD · **Difficulty:** 3 of 5
+**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $150 USD · **Difficulty:** 3 of 5
 
 A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
 
 ![PVTrace concept](media/hero.png)
 
-[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [Review note](docs/REVIEW.md)
+[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement PVT-DWG-001 (PDF)](cad/drawings/PVT-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
 An IV curve is the most informative single test of a solar module: one sweep from short circuit to open circuit shows its power, and the shape of the curve points to shading, a failed bypass diode, cracked cells, corroded connections or plain wear. PVTrace uses the simplest load that can trace that curve, a capacitor bank that the module charges in a few tens of milliseconds, as proven open designs such as [IV Swinger 2](https://github.com/csatt/IV_Swinger) and [Cáceres et al. (2020)](https://doi.org/10.3390/en13174320) have done. It adds what a field user needs: a handheld case with a screen, an irradiance reference cell and temperature probe, translation to standard test conditions and a transparent grading rule.
 
-Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about $150 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
+Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about $160 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
 
 ## Burning platform
 
@@ -43,7 +43,7 @@ The obstacle is trust. Refurbished modules exported to secondary markets show 10
 | India | Cumulative solar waste could reach up to 600 kilotonnes by 2030 ([CEEW, 2024](https://www.ceew.in/press-releases/robust-recycling-increasing-solar-waste-critical-indias-energy-security-ceew)); a large repair and resale trade can use cheap grading. |
 | Australia | World-leading rooftop solar per person and about 280,000 tonnes of end-of-life panels by the end of 2025; researchers propose a resale certification with simple grades ([UniSA, 2025](https://unisa.edu.au/media-centre/Releases/2025/old-solar-panels-can-power-new-future/)). |
 | United States | Up to 1 million tons of panel waste expected by 2030 and up to 10 million tons by 2050 ([US EPA](https://www.epa.gov/hw/end-life-solar-panels-regulations-and-management)); reuse programs need test data per module. |
-| European Union | PV panels fall under the WEEE Directive ([Directive 2012/19/EU](https://eur-lex.europa.eu/eli/dir/2012/19/oj/eng)), so a logged test per module helps decide between reuse and recycling. |
+| European Union | PV panels are category 4 equipment under the WEEE Directive ([Directive 2012/19/EU, Annex I and II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32012L0019)), so a logged test per module helps decide between reuse and recycling. |
 
 ## What sparked the idea
 
@@ -57,27 +57,28 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 ## Concept
 
-A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 4.4 mF capacitor bank in about 13 to 43 ms (estimate) while the tracer samples several hundred voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. Estimated mass is about 1.35 kg and parts cost about $149.
+A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 6.6 mF capacitor bank in about 20 to 68 ms (calculated) while the tracer samples 400 or more voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). A digital isolator separates the measurement side from the controller and USB port. The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. Calculated mass is about 1.41 kg, battery life about 10 h, and parts cost $163.
 
-Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md)
+Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md)
 
-Not yet met on current estimates: the 20 ms minimum sweep time for high-current modules, sunlight readability of the display, and insulation screening of second-life modules (out of scope; use an insulation tester alongside). Details are in the [review note](docs/REVIEW.md).
+Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance, sunlight readability of the display, insulation screening of second-life modules (out of scope; use an insulation tester alongside), and cost against the $150 budget ($163; a $165 budget is proposed, awaiting Amish). Details are in the [review note](docs/REVIEW.md).
 
 ## Key components
 
-- Capacitive load: 2 x 2200 µF 160 V capacitors, load and discharge MOSFETs, 22 ohm 50 W dump resistor
+- Capacitive load: 3 x 2200 µF 160 V capacitors (6.6 mF), load and discharge MOSFETs, 22 ohm 50 W dump resistor
 - Measurement board: 4 milliohm shunt, current-sense amplifier, voltage divider, dual 12-bit ADC
+- Isolation barrier: digital isolator and isolated DC-DC converter between the measurement side and the controller
 - Reference cell and module temperature probe in a clip-on sensor pod
 - ESP32 controller with 2.8 in display, microSD logging and Wi-Fi export
 - 20 A DC fuse, 2-pole DC isolator and MC4 test leads
-- Protected 18650 Li-ion cell with USB-C charging
-- IP54 handheld case
+- Protected 18650 Li-ion cell with USB-C charging and a temperature cut-off
+- IP54 light grey handheld case, about 220 x 130 x 80 mm
 
-The working bill of materials is in [bom/bom.csv](bom/bom.csv).
+The priced bill of materials is in [bom/bom.csv](bom/bom.csv); the parametric model is `cad/src/model.py`, with STEP and STL exports in `cad/step` and `cad/stl`.
 
 ## Safety
 
-> Solar panels produce dangerous DC voltage whenever light falls on them and cannot be switched off. Rate leads and switching for the full voltage and current, mate and unmate MC4 connectors only with the isolator open, and never break a DC circuit under load. PVTrace is limited to 100 V DC; never connect it to a longer string. The load capacitors store up to 22 J and must be discharged before the case is opened. The instrument contains a Li-ion cell; charge it on a non-flammable surface and not while connected to a module. Handle modules with gloves: frames are sharp and broken glass can cut.
+> Solar panels produce dangerous DC voltage whenever light falls on them and cannot be switched off. Rate leads and switching for the full voltage and current, mate and unmate MC4 connectors only with the isolator open, and never break a DC circuit under load. PVTrace is limited to 100 V DC; never connect it to a longer string. The load capacitors store up to 33 J and must be discharged before the case is opened. The instrument contains a Li-ion cell; charge it in shade on a non-flammable surface and not while connected to a module. In full sun the case can get hot inside; keep it in shade between sweeps. Handle modules with gloves: frames are sharp and broken glass can cut.
 
 ## Repository layout
 

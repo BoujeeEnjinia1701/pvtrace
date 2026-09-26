@@ -3,7 +3,7 @@ doc_id: PVT-PRB-001
 title: PVTrace problem statement
 project: PVTrace
 doc_type: Problem statement
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Problem with cited evidence, users, context, constraints, prior work and co-design checklist for TRL 2
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Budget constraint notes the proposed $165 (PVT-DDR-001); WEEE coverage of PV panels confirmed against the directive text
 ---
 
 # PVTrace problem statement
@@ -53,7 +57,7 @@ The gap PVTrace addresses is a handheld, battery-powered, open tracer that works
 
 ## Constraints
 
-- Garage-buildable prototype, about $150 USD in parts (`project.yaml` budget).
+- Garage-buildable prototype, about $150 USD in parts (`project.yaml` budget). The TRL 3 design costs $163; a rise to $165 is proposed, awaiting Amish (PVT-DDR-001).
 - Off-the-shelf parts and hand tools; no custom machining.
 - Voltage kept below 120 V DC, the extra-low-voltage limit for ripple-free DC in IEC 61140 ([summary](https://en.wikipedia.org/wiki/Extra-low_voltage)). Full strings at 600 to 1,500 V are out of scope.
 - Works in full sun at up to 45 °C ambient, with no mains power.
@@ -72,7 +76,7 @@ The gap PVTrace addresses is a handheld, battery-powered, open tracer that works
 - [ ] Interview two or more small installers on which faults they meet most and how they find them today.
 - [ ] Confirm the module types in the partner's stock (cell count, Voc, Isc) to fix the voltage and current ranges.
 - [ ] Agree what a buyer needs to see on a printed or phone grade label.
-- [ ] Check local rules for handling and reselling used modules (for example, WEEE in the EU).
+- [ ] Check local rules for handling and reselling used modules. In the EU, photovoltaic panels are category 4 equipment under the WEEE Directive ([Directive 2012/19/EU, Annex I and II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32012L0019)).
 
 ## Open questions
 

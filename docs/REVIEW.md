@@ -68,3 +68,63 @@ Requirements not met or at risk:
 ### Recommended next step
 
 Review this note and the media, then decide items 2 to 4, 6 and 9. If approved, run `/advance-trl3` to check the sweep model with cell capacitance, the discharge and thermal loads, the error budget and the grading rules by calculation, and to produce the parametric model and drawing sheet.
+
+## Session 2026-09-25: TRL 3
+
+### What was done
+
+- `docs/decisions/0001-trl2-review-decisions.md` (PVT-DDR-001 v0.1): items 1 to 8 of the TRL 2 review are adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review; items 9 to 13 stay open.
+- `docs/04-calcs/01-sizing.md` (PVT-CAL-001 v0.1) with `docs/04-calcs/sizing.py` and `docs/04-calcs/results.csv`: single-diode sweep model with loop resistance and capacitor tolerance, range and cold Voc, resolution and error budget, STC uncertainty, discharge and opening current, heat in sun, battery, mass and cost. The script reads `cad/src/model.py` and `bom/bom.csv`.
+- `cad/src/model.py`: parametric build123d model (case, lid and window, controller, measurement board, isolation board, three capacitors, MOSFET bar, dump resistor, fuse, isolator, battery, lead stubs, sensor pod) with an interference check (no clashes). Exports `cad/step/` and `cad/stl/` for the assembly, the enclosure and the sensor pod.
+- `cad/src/sheets.py` and `cad/drawings/PVT-DWG-001` (SVG, PDF, PNG): general arrangement at Rev P1, marked "CONCEPT, NOT FOR FABRICATION" and "PRELIMINARY, NOT FOR FABRICATION". The concept blueprint keeps PVT-DWG-010, so DWG-001 was free.
+- `bom/bom.csv`: 14 lines, all priced with supplier types; third capacitor, new line 14 (isolation barrier), light grey case, charger with temperature cut-off. `bom/bom-notes.md` updated.
+- `cad/src/concept_media.py` now builds from `model.py`; all media refreshed (hero, blueprint Rev P2, exploded with callouts 1 to 12 and 14, cutaway, flow at 7.9 J, `model.glb`, `viewer.html`). No `_views` folders remain.
+- PVT-PRB-001, PVT-PRC-001 and PVT-REQ-001 at v0.3; `README.md` and `project.yaml` (trl 3, trl_target 3, evidence list) updated. PDFs in `docs/pdf/`.
+
+### Requirements (PVT-CAL-001)
+
+Nine met, four not met, two at risk, two not verifiable at TRL 3.
+
+| ID | Status | Value |
+| --- | --- | --- |
+| R3 | **Not met** (worst-case tolerance) | High-current module 20.5 ms at 6.6 mF nominal, 16.4 ms at -20 % |
+| R13 | **Not met** (display readability); heat at risk | About 56 °C inside a light case, 73 °C dark, at 45 °C in sun |
+| R16 | **Not met** (out of scope) | No insulation test |
+| R17 | **Not met** at $150 | $163; met at the proposed $165 |
+| R7, R8 | At risk | STC ±3.7 to ±5.4 %; needs a reference cell within ±4.5 % |
+| R6, R9 | Not verifiable at TRL 3 | Instrument noise 0.08 %; about 7 or more samples per volt |
+| R1, R2, R4, R5, R10, R11, R12, R14, R15 | Met (R1, R2, R10, R15 by design review; R5 on paper) | 410 pairs minimum; 0.21 s to 30 V, 40 s passive to 60 V; 1.41 kg; 10.3 h |
+
+Corrections to TRL 2 figures: stored energy at 100 V is now 33 J (6.6 mF); battery life is 10.3 h, not 16 h, with the isolated side and boost counted; mass 1.41 kg, not 1.35 kg; the case grows to 220 x 130 x 80 mm; the module still delivers up to 2.5 A at 99 % of Voc, so the load switch must stay closed up to 6 ms longer to open below 0.5 A. The 4.4 mF sweep times from TRL 2 were reproduced within 2 ms.
+
+### Decisions recorded
+
+Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review: capacitive load; 100 V, 20 A rating; 6.6 mF; isolation option B; 2.8 in TFT plus phone export; once-calibrated reference cell; ESP32 controller; grade thresholds A 90 %, B 80 %, C 70 %. Pitch and problem are unchanged, as the TRL 2 review recommended.
+
+### Still awaiting Amish
+
+- Budget: $165 recommended; `budget_usd` stays 150 (PVT-DDR-001 item 9).
+- First co-design partner: no preference stated (item 10).
+- R3 at tolerance: fourth capacitor, capacitor selection, or relaxing the bound (item 11, no recommendation yet).
+- Heat and sun: sun hood for the display (item 12).
+- Larger case, 220 x 130 x 80 mm (item 13).
+
+### Safety concerns
+
+- 33 J stored at 100 V; both discharge paths are required, and the switch must not open a loaded DC circuit (hold until below 0.5 A).
+- Inside temperature in sun can pass the Li-ion charging limit; charge only in shade with the isolator open; keep the temperature cut-off.
+- Two 450 W modules in series reach about 109 V when cold; the 100 V check must refuse them and the manual must say so.
+- The isolation barrier's working voltage and test rating must be confirmed from datasheets before any build.
+- Unchanged from TRL 2: live DC that cannot be switched off, DC arcs, mixed MC4 brands, heavy and broken modules, work at height.
+
+### Problems and notes
+
+- Citations: the EU WEEE coverage of PV panels was verified with WebFetch against the directive text (Article 5(1), Annex I and II category 4) and the link updated. The 20 ms lower bound in R3 and the capacitance of TOPCon and HJT modules could not be checked (WebSearch exhausted), so R3's bound stays a working figure.
+- CalRig covers the temperature probe only from 10 to 40 °C; PVTrace modules run at 60 °C or more. This is a range limit, not an interface conflict; CalRig was not edited.
+- The kit's cutaway still cuts near the origin; the model is centered on the case, so the section passes through the capacitors. The leads and sensor pod stay excluded from the cutaway.
+- The kit's concept sheet shows only the current revision row, so the blueprint shows Rev P2 without its P1 row.
+- No TRL 4 material exists in the repo; none was created.
+
+### Recommended next step
+
+TRL 4 is on hold by Amish's instruction. Review PVT-DDR-001 and decide items 9 to 13, especially the budget and the R3 option. For the record only, TRL 4 would need a bench prototype, a lab test report (TST, `environment: lab`) covering sweep time against a known module, discharge, accuracy against a calibrated meter and isolation, and build log entries.
