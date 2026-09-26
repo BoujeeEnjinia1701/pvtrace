@@ -47,7 +47,7 @@ The obstacle is trust. Refurbished modules exported to secondary markets show 10
 
 ## What sparked the idea
 
-The starting point was the hailstorm of March 15, 2024, which damaged thousands of modules at the 350 MW Fighting Jays solar farm in Fort Bend County, Texas ([Renewable Energy World, 2024](https://www.renewableenergyworld.com/solar/utility-scale/texas-hailstorm-damages-thousands-of-solar-panels-at-350-mw-farm/); [VDE Americas, 2025](https://www.vde.com/en/vde-americas/newsroom/250114-reevaluating-fighting-jays)). Shattered glass is easy to see after a storm like that, but a module with intact glass can still carry cracked cells, and every module that comes off a damaged array needs a call: back on the rack, resale, or recycling. A glance or a single voltage reading cannot make that call; an IV curve taken at the module, with the result logged, can. PVTrace is sized for that job: one module or a short string at a time, on the ground next to the array or at a reuse yard.
+The starting point was the hailstorm of March 15, 2024, which damaged thousands of modules at the 350 MW Fighting Jays solar farm in Fort Bend County, Texas ([*Newsweek*, 2024](https://www.newsweek.com/thousands-solar-panels-texas-destroyed-hailstorm-1883546); [VDE Americas, 2025](https://www.vde.com/en/vde-americas/newsroom/250114-reevaluating-fighting-jays)). Shattered glass is easy to see after a storm like that, but a module with intact glass can still carry cracked cells, and every module that comes off a damaged array needs a call: back on the rack, resale, or recycling. A glance or a single voltage reading cannot make that call; an IV curve taken at the module, with the result logged, can. PVTrace is sized for that job: one module or a short string at a time, on the ground next to the array or at a reuse yard.
 
 ## Problem
 
@@ -97,6 +97,12 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv); the parametric mo
 ## Documentation
 
 Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (PVT-PRC-001 for the precis), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `PVT-PRC-001/v1.0`.
+
+## Credits
+
+Designed by Amish Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
+
+AI assistance (Claude) was used to accelerate concept renders, prototype documentation and first-pass sizing calculations. Design direction and all decisions are Amish Chadha's, recorded in this repository's decision records (`docs/decisions/`).
 
 ## Licenses
 

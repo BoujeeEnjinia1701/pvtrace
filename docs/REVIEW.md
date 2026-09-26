@@ -163,3 +163,8 @@ None for PVTrace. The CalRig temperature range limit (10 to 40 °C) remains a no
 ### TRL 4
 
 TRL 4 remains on hold by Amish's instruction. `trl: 3` and `trl_target: 3` are unchanged. The reference cell calibration and the display readability field check follow from the decisions but are TRL 4 work and were not started.
+
+## Session 2026-09-26: sources strengthened
+
+- "What sparked the idea" (README): replaced the trade-press source Renewable Energy World (2024) with *Newsweek* (2024), which reports the March 15, 2024 hailstorm, the 350 MW Fighting Jays farm near Needville in Fort Bend County and the thousands of damaged panels. The VDE Americas (2025) analysis stays as the second source. The inspiration event is unchanged.
+- No other weak sources were flagged; all region rows already carry citations. `docs/01-problem.md` did not cite the replaced source, so no controlled document changed.
