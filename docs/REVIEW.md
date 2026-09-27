@@ -168,3 +168,27 @@ TRL 4 remains on hold by Amish's instruction. `trl: 3` and `trl_target: 3` are u
 
 - "What sparked the idea" (README): replaced the trade-press source Renewable Energy World (2024) with *Newsweek* (2024), which reports the March 15, 2024 hailstorm, the 350 MW Fighting Jays farm near Needville in Fort Bend County and the thousands of damaged panels. The VDE Americas (2025) analysis stays as the second source. The inspiration event is unchanged.
 - No other weak sources were flagged; all region rows already carry citations. `docs/01-problem.md` did not cite the replaced source, so no controlled document changed.
+
+## Session 2026-09-26: product appearance model and photoreal renders
+
+Amish chose this repo for the first batch of product renders on 2026-09-26.
+
+### What was done
+
+- New `cad/src/product_model.py`: `product_parts()` returns 68 appearance parts (30 shell, 25 internal, 4 accessory, 9 context) with colour, material, BOM line, group and explode offset, plus `TITLE` and three `RENDER_VIEWS` (hero, exploded, in-use). It imports `PARAMS` and `build_parts()` from `cad/src/model.py`; `model.py` has no `derived()` function, so its envelopes are used directly. Every shape is valid and tessellates.
+- Appearance detail added: filleted case and lid with a parting-line groove at Z 52; wrap-around rubber corner boots; ribbed rubber side grips; fluted M16 and M12 cable glands; a clear polycarbonate display window over a lit 2.8 in screen showing an IV curve, a power curve, a grade tile and the maximum power point; the printed sun hood with softened edges; a membrane keypad with a teal sweep key, two menu keys and green and amber status LEDs; lid screws; a raised "PVTrace" mark and a yellow "100 V DC" warning label; the DC isolator with base ring, ON/OFF ticks, grey knob and red handle; red and black PV test leads swept to the floor and ending in MC4 connectors; a USB-C port flap.
+- Internals for the exploded view: controller board and display module, measurement board with shunt, isolation board, MOSFETs on an aluminium bar with fins, aluminium-clad discharge resistor, fuse holder with a 10 x 38 fuse, three blue capacitors with end discs, 18650 cell in its holder, isolator body. The sensor pod (item 12) is an accessory beside the case.
+- Context for the "in-use" view only: the shared clay forearm and hand (grip pose) carrying the tracer by its -X end, fingers under the case floor and thumb round the front corner, beside a small framed 12-cell PV module lying face up; the module's own leads end in MC4 connectors mated to the tracer's leads. The hero view shows the tracer and its leads without context.
+- README: hero image now points to `media/render-hero.png`, with an "Exploded render" link added; the orchestrator produces the render files.
+
+### Differences from model.py (Proposed, awaiting Amish)
+
+1. **Plan corner radius.** `model.py` has a square case; the appearance model rounds the vertical edges to R10 and adds top and bottom fillets. Recommendation: accept; real IP54 handheld cases have radiused corners and the main dimensions are unchanged.
+2. **Corner bumpers.** `model.py` has 14 mm square bumpers centred on each vertical edge, 40 mm high. The appearance model uses wrap-around boots that stand the same 7 mm proud and reach 24 mm along each face. Recommendation: accept as the look to aim for when a case is chosen.
+3. **Additions not in model.py:** keypad and status LEDs, side grips, USB-C flap, labels and the lead routing to the floor (model.py shows 60 mm straight stubs). Recommendation: accept as appearance only; the keypad and LEDs would need a line in the BOM (item 13 or a new line) if they survive to TRL 4.
+4. **Sensor pod shape.** The pod keeps the `model.py` envelope, reference cell and clip size, with fillets and a slot in the clip. Recommendation: accept.
+
+### Status
+
+This is an appearance model only: no tolerances, no fabrication detail, nothing past TRL 3. `trl: 3` is unchanged, and TRL 4 remains on hold by Amish's instruction.
+- The `in-use` view (clay hand carrying the tracer beside a module) is defined in RENDER_VIEWS but not published: the hand pose read poorly in the render. To revisit with a better carrying pose.
