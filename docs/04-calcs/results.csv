@@ -10,9 +10,9 @@ R8,±3.7 to ±5.4 % (needs reference cell within ±4.5 %),±5 % or better,At ris
 R9,7 or more samples per volt; rules drafted,Flags within 5 s,Not verifiable at TRL 3
 R10,"A, B, C, reject thresholds decided (PVT-DDR-002); editable table",Partner-editable grades,Met (design review)
 R11,30 V in 0.21 s; 60 V passive in 40 s; opens below 0.5 A after up to 6 ms more,30 V in 2 s; 60 V in 60 s; open below 0.5 A,Met
-R12,1.43 kg; 234 x 144 x 80 mm over bumpers,1.5 kg; 250 x 150 x 100 mm,Met
+R12,1.49 kg; 234 x 144 x 80 mm over bumpers,1.5 kg; 250 x 150 x 100 mm,Met
 R13,"Inside about 56 °C (light case) to 73 °C (dark) at 45 °C in sun; TFT with sun hood, readability unproven; IP54 case","0 to 45 °C, sun, IP54, readable",Not met (display); at risk (heat)
 R14,"10.3 h, about 1853 sweeps",8 h or 200 sweeps,Met
 R15,CSV fields defined in PVT-PRC-001; no firmware at TRL 3,"CSV per sweep, USB or Wi-Fi export",Met (design review)
 R16,No insulation test in this instrument,Detect insulation faults,Not met (out of scope)
-R17,$164 in parts,$165 or less,Met
+R17,USD 178 in parts,Value-engineering target USD 165,Over the target by USD 13

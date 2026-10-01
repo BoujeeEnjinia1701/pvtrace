@@ -61,7 +61,7 @@ MATE = [(250.0, 150.0, 35.0), (320.0, 150.0, 35.0)]
 # 11 Test leads, 1 m, 4 mm2 double insulated, with MC4 connectors
 leads = None
 for (y0, m) in zip((-P["gland_y"], P["gland_y"]), MATE):
-    run = path([(L / 2 + 12, y0, GZ), (L / 2 + 45, y0, 12), (m[0] - 20, y0 + 40, 12),
+    run = path([(L / 2 + 22, y0, GZ), (L / 2 + 45, y0, 12), (m[0] - 20, y0 + 40, 12),
                 (m[0], m[1] - 45, 20), (m[0], m[1] - 30, m[2])], 3.5)
     plug = Pos(m[0], m[1], m[2]) * Rot(-90, 0, 0) * Cylinder(9, 60)
     leads = run + plug if leads is None else leads + run + plug
@@ -73,7 +73,7 @@ pod = Pos(*pc) * Rot(TILT, 0, 0) * M["pod"]
 probe = path([on_module(8, -20, POD_X + 30), on_module(80, -40, POD_X + 30)], 3)
 probe = probe + Pos(*on_module(80, -40, POD_X + 30)) * Box(20, 20, 8)
 pod_cable = path([on_module(-40, -12, POD_X), (POD_X + 30, 150, 12),
-                  (-L / 2 - 60, 35, 12), (-L / 2 - 12, 35, GZ)], 3)
+                  (-L / 2 - 60, P["gland_sensor_y"], 12), (-L / 2 - 18, P["gland_sensor_y"], GZ)], 3)
 pod_all = pod + probe + pod_cable
 
 # ---------------- context (grey, hero only) ----------------
@@ -120,16 +120,18 @@ parts = [
     Part("Sensor pod: reference cell, temperature", pod_all, "#0EA5E9", 12, scr(-40, -470)),
     Part("Isolation barrier (isolator, DC-DC)", M["isolation"], "#DB2777", 14, scr(40, 240)),
     Part("Display sun hood, printed", M["hood"], "#E5E7EB", 15, (0, 0, 470)),
+    Part("Chassis plate, polycarbonate", M["plate"], "#A5B4FC", 16, scr(-320, 330)),
+    Part("USB-C charging socket", M["usb"], "#374151", 17, scr(-300, 120)),
 ]
 
 if __name__ == "__main__":
     render_all(
-        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P3",
+        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P4",
         key_figures=["Single modules and short strings to 100 V, 20 A",
                      "Capacitive load 6.6 mF: sweep about 20 to 68 ms (PVT-CAL-001)",
                      "Up to 33 J per sweep dumped in a 50 W resistor",
-                     "Case 220 x 130 x 80 mm with sun hood; about 1.43 kg; isolated",
-                     "$164 in parts (indicative; budget $165)"],
+                     "Case 220 x 130 x 80 mm with sun hood; about 1.49 kg; isolated",
+                     "USD 178 in parts (value-engineering target USD 165)"],
         scale_figure=False, context=context,
         cut_exclude=("Test leads with MC4 connectors", "Sensor pod: reference cell, temperature"),
         flow={"title": "one sweep, from panel to grade (calculated in PVT-CAL-001; energy in J for a 450 W module)", "unit": "J",

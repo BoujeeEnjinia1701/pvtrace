@@ -198,3 +198,54 @@ This is an appearance model only: no tolerances, no fabrication detail, nothing 
 - Kit 1.5.0 synced: STANDARDS v1.5 (sections 12 to 15: product renders, storefront images and image quality, public release, authorship and signing), `.kit/cards.py`, `.kit/image_qc.py`, `.kit/release_gate.py`, issue templates, and the `/render-product` and `/release` commands. `CLAUDE.md` now matches `.kit/CLAUDE.md`.
 - Every `media/render-*.png` recaptioned from its original render with the new layout: the title, concept label and repository sit in a band above the render and the view note in a band below it, each line wrapped to the image width, so no text overlaps other text or the render or runs off the image. `media/card.png` and `media/social-preview.png` regenerated with the same rules.
 - `python .kit/image_qc.py` and `python .kit/release_gate.py` pass. trl stays 3.
+
+## Session 2026-10-01: design for construction and prototype build plan (kit 1.7.0)
+
+### What was done
+
+- Kit 1.7.0 installed (`.kit/`, `.claude/commands/`); `CLAUDE.md` now matches `.kit/CLAUDE.md`.
+- Constructability review of every part with build123d checks, and the design made buildable under Amish's 2026-09-30 instruction ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations."). Recorded in `docs/decisions/0003-design-for-construction.md` (PVT-DDR-003 v0.1, Draft, open for Amish's review).
+- `cad/src/model.py` rewritten as the constructable design: `build_components()` and `build_pod()` give every part and fixing; `python cad/src/model.py --check` runs 183 checks (overlaps, contacts, clearances, screwdriver access, lid lift-off, R12 envelope); all pass. `build_parts()` is kept for `concept_media.py` and `product_model.py`. STEP (assembly, enclosure, sensor pod, chassis plate) and STL regenerated.
+- `bom/bom.csv`: lines 1 to 4, 12, 13 and 15 respecified; new lines 16 (chassis plate) and 17 (USB-C socket). `bom/bom-notes.md` updated.
+- `docs/04-calcs/sizing.py` and PVT-CAL-001 v0.3: mass 1.49 kg, cost USD 178; R17 reported against the value-engineering target. PVT-REQ-001 v0.5 and PVT-PRC-001 v0.5 updated to match.
+- `cad/drawings/PVT-DWG-001` Rev P3 (general arrangement); new making sketches PVT-DWG-101 to 108 (body, chassis plate, MOSFET bar, lid, window, sun hood, pod housing, pod clip). Concept media regenerated (blueprint PVT-DWG-010 Rev P4, exploded view with callouts 16 and 17).
+- `cad/src/build_plan_media.py`: overview, 8 making sketches, 3 hole layouts (case, plate, lid), 8 joint close-ups, 12 step pictures and the block wiring diagram, all drawn from the model.
+- `docs/05-build-plan.md` (PVT-BLD-001 v0.1) and `docs/06-design-decisions.md` (PVT-DEC-001 v0.1) written; `project.yaml` has `design_state: constructable` and both in `trl_evidence`; README links line, cost wording and a "Building the prototype" section.
+
+### Design changes made for construction (PVT-DDR-003)
+
+1. C1. Gland holes and inside locknuts; lead glands 18 mm (was 20) each side of centre, sensor gland 45 mm (was 35) toward the back, so the locknuts clear the fuse holder.
+2. C2. Window 72 x 54 mm bonded on top of the lid over a 62 x 46 mm opening (it floated in a same-size opening).
+3. C3. Sun hood given four inside screw tabs, widened to 92 mm outside, with screwdriver holes in the roof lip (it had no fixing).
+4. C4. Display board modelled at its real 86 x 50 mm and hung on four 7 mm spacers on the hood screws.
+5. C5. Polycarbonate chassis plate, 1.5 mm, on five standoffs; every internal part screwed to it; boards on 6 mm standoffs.
+6. C6. Bought case's corner pillars added; capacitor bank moved clear of them; plate corners notched; fuse holder specified at 44 mm long and moved 2.5 mm forward.
+7. C7. Capacitors held by a silicone bed and two cable ties through plate slots.
+8. C8. MOSFET bar drilled and tapped, MOSFETs on insulating pads; isolator given its maker's flange and screws; two screws for each holder.
+9. C9. Measurement board turned 90 degrees and moved to clear the gland nuts, MOSFET bar and isolator.
+10. C10. IP65 USB-C charging socket added in the left end (R14 had no port through the case).
+11. C11. Sensor pod given a C-clip with an M6 thumb screw, heat-set inserts and an M12 gland; the reference cell read by a 16-bit ADC on the controller side.
+
+### Key results
+
+- Requirements: R12 met at 1.49 kg (about 14 g to spare). R17: value-engineering target USD 165, estimated cost USD 178 (USD 13 over the target). Not met as before: R3 at worst-case tolerance, R13 display readability, R16 out of scope. At risk: R7, R8. Not verifiable at TRL 3: R6, R9. Sweep, discharge, heat and battery results unchanged.
+
+### Proposed, awaiting Amish (see PVT-DEC-001)
+
+- Accept the design-for-construction changes C1 to C11 (recommended).
+- Sensor pod on the controller side through its own ADC (recommended) or on the PV side (PVT-DDR-003 A1).
+- Accept the 14 g mass margin and weigh at TRL 4 (recommended) (A2).
+- Still open from earlier: R3 at tolerance (no recommendation), first co-design partner, the appearance model differences of 2026-09-26.
+
+### Stale on Amish's Mac
+
+The design changed visibly (wider sun hood with tabs, smaller window, USB-C socket on the left end, glands moved, chassis plate and new internal layout, pod clip). These are now stale and are made on Amish's Mac: `media/render-*.png`, `media/card.png`, `media/social-preview.png`, and the appearance model `cad/src/product_model.py` (it still draws the concept internals and the narrower hood, although it imports the new `PARAMS`).
+
+### Safety concerns
+
+- Unchanged: live DC to 100 V and 20 A that cannot be switched off, 33 J in the capacitors, a Li-ion cell in a case that can pass 45 °C inside in sun.
+- New from this work: the MOSFET tabs are live and sit on an aluminium bar, so the insulating pads and bushings are safety parts (checked at stop S2); the discharge resistor now sits on a plastic plate, so its free-air rating must be confirmed (register item to confirm 4); the sensor pod must stay on the controller side (A1). The build plan has eight safety stops, with the first live connection on a small module only after bench checks.
+
+### Recommended next step
+
+Review PVT-DDR-003 and the design decisions register, decide open decisions 1 to 3, then update the renders on the Mac. TRL 4 (building to this plan) stays on hold until Amish says otherwise.

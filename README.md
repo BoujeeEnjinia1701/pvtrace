@@ -2,19 +2,19 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827) [![DOI](https://zenodo.org/badge/1388477754.svg)](https://zenodo.org/badge/latestdoi/1388477754) [![REUSE compliant](https://github.com/BoujeeEnjinia1701/pvtrace/actions/workflows/reuse.yml/badge.svg)](https://github.com/BoujeeEnjinia1701/pvtrace/actions/workflows/reuse.yml) [![Archived in Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/BoujeeEnjinia1701/pvtrace/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/BoujeeEnjinia1701/pvtrace)
 
-**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $165 USD · **Difficulty:** 3 of 5
+**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype cost:** about USD 178 (value-engineering target USD 165) · **Difficulty:** 3 of 5
 
 A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
 
 ![PVTrace: handheld solar panel IV curve tracer, product render](media/render-hero.png)
 
-[Exploded render](media/render-exploded.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement PVT-DWG-001 (PDF)](cad/drawings/PVT-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
+[Exploded render](media/render-exploded.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement PVT-DWG-001 (PDF)](cad/drawings/PVT-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Prototype build plan](docs/05-build-plan.md) · [Design decisions](docs/06-design-decisions.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
 An IV curve is the most informative single test of a solar module: one sweep from short circuit to open circuit shows its power, and the shape of the curve points to shading, a failed bypass diode, cracked cells, corroded connections or plain wear. PVTrace uses the simplest load that can trace that curve, a capacitor bank that the module charges in a few tens of milliseconds, as proven open designs such as [IV Swinger 2](https://github.com/csatt/IV_Swinger) and [Cáceres et al. (2020)](https://doi.org/10.3390/en13174320) have done. It adds what a field user needs: a handheld case with a screen, an irradiance reference cell and temperature probe, translation to standard test conditions and a transparent grading rule.
 
-Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about $164 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
+Keeping it open and garage-buildable matters because the people who most need to grade panels, small installers, repair shops and second-life programs in lower-income markets, are the least able to buy a commercial tracer. PVTrace stays below 100 V so it remains an extra-low-voltage instrument for single modules and short strings, uses about USD 178 of common parts, and writes every sweep to an open CSV file that anyone can check or reprocess.
 
 ## Burning platform
 
@@ -57,11 +57,11 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 ## Concept
 
-A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 6.6 mF capacitor bank in about 20 to 68 ms (calculated) while the tracer samples 400 or more voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). A digital isolator separates the measurement side from the controller and USB port. The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. A printed sun hood shades the display. Calculated mass is about 1.43 kg, battery life about 10 h, and parts cost $164 against the $165 budget.
+A handheld tracer for single modules and short strings up to 100 V and 20 A. The module charges a 6.6 mF capacitor bank in about 20 to 68 ms (calculated) while the tracer samples 400 or more voltage and current pairs. A reference cell and a probe on the module back give irradiance and temperature, so the curve can be translated to standard test conditions (IEC 60891). A digital isolator separates the measurement side from the controller and USB port. The tracer flags shading or bypass diode steps, high series resistance, low shunt resistance and current loss, grades second-life modules against nameplate, and saves every sweep as CSV. A printed sun hood shades the display. Calculated mass is about 1.49 kg and battery life about 10 h. Value-engineering target: USD 165; estimated cost of the constructable design: USD 178 (USD 13 over the target).
 
-Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md), [docs/decisions/0002-recommendations-accepted.md](docs/decisions/0002-recommendations-accepted.md)
+Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md), [docs/decisions/0002-recommendations-accepted.md](docs/decisions/0002-recommendations-accepted.md), [docs/decisions/0003-design-for-construction.md](docs/decisions/0003-design-for-construction.md)
 
-Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance, sunlight readability of the display (a sun hood is now fitted, but readability cannot be shown until a field check), and insulation screening of second-life modules (out of scope; use an insulation tester alongside). Cost is now met: $164 against the $165 budget Amish set on 2026-09-25. Details are in the [review note](docs/REVIEW.md).
+Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance, sunlight readability of the display (a sun hood is now fitted, but readability cannot be shown until a field check), and insulation screening of second-life modules (out of scope; use an insulation tester alongside). The estimated cost, USD 178, is USD 13 over the USD 165 value-engineering target; savings worth trying are in the [design decisions register](docs/06-design-decisions.md). Details are in the [review note](docs/REVIEW.md).
 
 ## Key components
 
@@ -72,9 +72,15 @@ Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules
 - ESP32 controller with 2.8 in display, microSD logging and Wi-Fi export
 - 20 A DC fuse, 2-pole DC isolator and MC4 test leads
 - Protected 18650 Li-ion cell with USB-C charging and a temperature cut-off
-- IP54 light grey handheld case, about 220 x 130 x 80 mm, with a printed display sun hood
+- IP54 light grey handheld case, about 220 x 130 x 80 mm, with a printed display sun hood, a polycarbonate chassis plate inside and a USB-C charging socket
 
 The priced bill of materials is in [bom/bom.csv](bom/bom.csv); the parametric model is `cad/src/model.py`, with STEP and STL exports in `cad/step` and `cad/stl`.
+
+## Building the prototype
+
+The prototype build plan ([docs/05-build-plan.md](docs/05-build-plan.md)) shows how to make and fit every component, with a making sketch for each made part, close-ups of the joints and a picture for each of the 12 assembly steps. Every part in the case body is screwed to a clear polycarbonate chassis plate that is built on the bench and lowered in as one unit; the display board hangs under the lid on the same four screws that hold the sun hood. Eight parts are made with hand tools and a 3D printer; the rest are bought. Making the concept buildable changed no function and is recorded in [PVT-DDR-003](docs/decisions/0003-design-for-construction.md). It is a plan only: building and testing to it is TRL 4 work.
+
+![PVTrace prototype: every component, pulled apart and numbered in build order](docs/05-build-plan/overview.png)
 
 ## Safety
 
@@ -84,7 +90,7 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv); the parametric mo
 
 | Folder | Contents |
 | --- | --- |
-| `docs/` | Problem, concept, requirements, calculations and design decisions |
+| `docs/` | Problem, concept, requirements, calculations, prototype build plan and design decisions |
 | `cad/src/` | build123d Python source, the source of truth for all geometry |
 | `cad/step/`, `cad/stl/` | Exported models for FreeCAD, other CAD tools and printing |
 | `cad/drawings/` | 2D sketches and dimensioned drawings |

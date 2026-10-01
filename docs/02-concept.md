@@ -3,9 +3,9 @@ doc_id: PVT-PRC-001
 title: PVTrace design precis
 project: PVTrace
 doc_type: Design precis
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,15 +25,19 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.5"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: "Constructable design (PVT-DDR-003): chassis plate, USB-C socket, fixings, pod clip; mass and cost updated; budget as a value-engineering target"
 ---
 
 # PVTrace design precis
 
 ## Summary
 
-PVTrace is a handheld, battery-powered IV curve tracer for single PV modules and short strings up to 100 V and 20 A. It sweeps the module from short circuit to open circuit by letting it charge a 6.6 mF capacitor bank in about 20 to 68 ms, samples several hundred voltage and current pairs, reads irradiance from a reference cell and temperature from a probe on the module back, translates the curve to standard test conditions (STC) and shows fault flags and a second-life grade on its screen. A digital isolator and an isolated DC-DC converter separate the measurement side from the controller and USB port. Every sweep is saved as an open CSV file. Parts cost $164 (indicative) against the $165 budget. The capacitive load follows proven open designs (IV Swinger 2; Cáceres et al., 2020, see PVT-PRB-001); what is new is a standalone field instrument with sensing, translation and a transparent grading rule.
+PVTrace is a handheld, battery-powered IV curve tracer for single PV modules and short strings up to 100 V and 20 A. It sweeps the module from short circuit to open circuit by letting it charge a 6.6 mF capacitor bank in about 20 to 68 ms, samples several hundred voltage and current pairs, reads irradiance from a reference cell and temperature from a probe on the module back, translates the curve to standard test conditions (STC) and shows fault flags and a second-life grade on its screen. A digital isolator and an isolated DC-DC converter separate the measurement side from the controller and USB port. Every sweep is saved as an open CSV file. Value-engineering target: USD 165. Estimated cost of the constructable design: USD 178 (USD 13 over the target). The capacitive load follows proven open designs (IV Swinger 2; Cáceres et al., 2020, see PVT-PRB-001); what is new is a standalone field instrument with sensing, translation and a transparent grading rule.
 
-The design choices in this precis were decided by Amish on 2026-09-25 (go with recommendation; PVT-DDR-001 and PVT-DDR-002). Sizing is in PVT-CAL-001; the general arrangement is drawing PVT-DWG-001.
+The design choices in this precis were decided by Amish on 2026-09-25 (go with recommendation; PVT-DDR-001 and PVT-DDR-002). Sizing is in PVT-CAL-001; the general arrangement is drawing PVT-DWG-001. The design was made constructable on 2026-10-01 (PVT-DDR-003): every part now has a fixing, and the prototype build plan PVT-BLD-001 shows how to make and fit each one.
 
 ![Figure 1. PVTrace in use: the tracer on the ground, test leads mated to the module's own MC4 leads and the sensor pod clipped to the lower frame edge.](../media/hero.png)
 
@@ -62,7 +66,7 @@ Table 1. Main components
 | No. | Component | Role |
 | --- | --- | --- |
 | 1 | Enclosure body, IP54 ABS handheld case about 220 x 130 x 80 mm, light grey, with rubber corner bumpers and three cable glands | Houses and protects the electronics |
-| 2 | Enclosure lid with display window and gasket | Closes the case; window for the display |
+| 2 | Enclosure lid with a 72 x 54 mm polycarbonate window bonded over a 62 x 46 mm opening | Closes the case; window for the display |
 | 3 | Controller and 2.8 in display board (ESP32 class, microSD) | Runs the sweep, analysis, grading, logging, Wi-Fi export |
 | 4 | Measurement board: 4 milliohm shunt, current-sense amplifier (INA240 class), voltage divider, dual 12-bit ADC with precision reference, MOSFET gate driver supply | Measures V and I during the sweep, on the PV side of the isolation barrier |
 | 5 | Load capacitors, 3 x 2200 µF 160 V electrolytic (6.6 mF) | The sweep load |
@@ -75,7 +79,9 @@ Table 1. Main components
 | 12 | Sensor pod: reference cell and shaded temperature probe, frame clip, 3 m cable | Measures irradiance and module temperature |
 | 13 | Hardware and consumables (not modeled) | Screws, standoffs, wire, gaskets |
 | 14 | Isolation barrier: 4-channel digital isolator and 1 W isolated DC-DC converter | Separates the PV-side measurement board from the controller, USB port and battery |
-| 15 | Display sun hood, printed light grey PETG, 86 x 64 x 18 mm, three walls and a 20 mm roof lip, open toward the user | Shades the display window to improve contrast in sun (PVT-DDR-002 item 12) |
+| 15 | Display sun hood, printed light grey PETG, 92 x 64 x 18 mm, three walls, a 20 mm roof lip and four screw tabs, open toward the user | Shades the display window to improve contrast in sun (PVT-DDR-002 item 12); its screws also hold the display board |
+| 16 | Chassis plate, 1.5 mm polycarbonate on five standoffs | Carries every part in the case body; lifts out as one unit (PVT-DDR-003) |
+| 17 | USB-C charging socket, IP65 with cap, in the left end | Charges the cell with the case closed (R14; PVT-DDR-003) |
 
 ![Figure 3. Exploded view with BOM callouts.](../media/exploded.png)
 
@@ -109,8 +115,8 @@ Assumptions: datasheet-class values; 56.6 mΩ loop resistance; module capacitanc
 - **Battery.** 0.85 W at 5 V (controller, display and isolated side), 0.94 W from the cell: about 10.3 h from a 3,000 mAh 18650.
 - **Heat.** In full sun at 45 °C ambient the inside of a light grey case reaches about 56 °C, a dark case about 73 °C. The case is therefore light grey, the charger has a temperature cut-off, a printed hood shades the display, and the tracer should stay in shade between sweeps.
 - **STC uncertainty.** Root-sum-square ±3.7 to ±5.4 %; R8 (±5 %) needs a reference cell calibrated within ±4.5 %.
-- **Mass.** About 1.43 kg with leads, sensor pod and sun hood.
-- **Cost.** $164 in parts (see `bom/bom.csv`), against the $165 budget set by Amish on 2026-09-25 (R17 met, $1 margin).
+- **Mass.** About 1.49 kg with leads, sensor pod, sun hood and chassis plate (R12 met, about 14 g to spare).
+- **Cost.** Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178 (USD 13 over the target; see `bom/bom.csv`).
 
 ## Fault flags and grading (draft rules)
 
@@ -139,7 +145,7 @@ Items 1 to 8 were decided by Amish on 2026-09-25: go with recommendation (PVT-DD
 7. **Controller.** ESP32 display board.
 8. **Grade thresholds.** As in the grading rules above, held in an editable table and still to be agreed with a second-life partner.
 
-Also decided by Amish on 2026-09-25: the $165 budget, the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Still proposed, awaiting Amish: the first co-design partner (item 10, no preference stated) and the R3 shortfall at tolerance (item 11, no recommendation yet).
+Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target since 2026-10-01), the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Still proposed, awaiting Amish: the first co-design partner (item 10, no preference stated) and the R3 shortfall at tolerance (item 11, no recommendation yet).
 
 ## Links to other lab projects
 

@@ -320,12 +320,14 @@ res("R16", "No insulation test in this instrument", "Detect insulation faults", 
 shell_cm3 = 2 * (L_ * W_ + L_ * H_ + W_ * H_) * MP["wall"] / 1e3 * 1e6
 MASS = {
     "Enclosure body and lid, ABS 3 mm, with bumpers and glands": shell_cm3 * 1.05 + 45,
-    "Window and gasket": 10, "Controller and display": 45, "Measurement board": 40,
+    "Window, PC 11.7 cm3 at 1.20 g/cm3, and gasket": 11.7 * 1.20 + 2, "Controller and display": 45, "Measurement board": 40,
     "Load capacitors, 3 x 75 g": 3 * 75, "MOSFETs and bar": 40, "Dump and bleed resistors": 45,
     "Fuse and holder": 40, "DC isolator": 120, "Battery, holder, charger": 72,
     "Test leads, 2 x 1 m 4 mm2 with MC4": 2 * (4e-6 * 8960 * 1e3 + 25) + 4 * 10,
     "Sensor pod with 3 m cable": 150, "Isolation board": 10, "Hardware and consumables": 50,
-    "Display sun hood, PETG 10.5 cm3 at 1.27 g/cm3, with screws": 10.5 * 1.27 + 2,   # PVT-DDR-002 item 12
+    "Display sun hood, PETG 11.6 cm3 at 1.27 g/cm3, with screws": 11.6 * 1.27 + 2,   # PVT-DDR-002 item 12, PVT-DDR-003
+    "Chassis plate, polycarbonate 1.5 mm, 37.8 cm3 at 1.20 g/cm3": 37.8 * 1.20,         # PVT-DDR-003 C5 (model volume)
+    "USB-C charging socket with lead": 8,                                             # PVT-DDR-003 C10
 }
 mass = sum(MASS.values())
 print("\nMass (g)")
@@ -340,10 +342,12 @@ res("R12", f"{mass / 1e3:.2f} kg; {env[0]:.0f} x {env[1]:.0f} x {MP['case_h']:.0
 
 rows = list(csv.DictReader((ROOT / "bom/bom.csv").open()))
 total = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in rows)
-BUDGET, BUDGET_OLD = 165.0, 150.0   # project.yaml budget_usd, raised from 150 by Amish's decision (PVT-DDR-002 item 9)
-print(f"\nBOM total ${total:.2f}: against ${BUDGET:.0f} (project.yaml) margin ${BUDGET - total:.2f}; "
-      f"against the former ${BUDGET_OLD:.0f} over by ${total - BUDGET_OLD:.2f}")
-res("R17", f"${total:.0f} in parts", f"${BUDGET:.0f} or less", "Met" if total <= BUDGET else "Not met")
+BUDGET = 165.0   # project.yaml budget_usd: a value-engineering target, not a limit (STANDARDS section 18)
+diff = total - BUDGET
+print(f"\nBOM total USD {total:.2f}: value-engineering target USD {BUDGET:.0f}; "
+      f"{'over' if diff > 0 else 'under'} the target by USD {abs(diff):.2f}")
+res("R17", f"USD {total:.0f} in parts", f"Value-engineering target USD {BUDGET:.0f}",
+    f"{'Over' if diff > 0 else 'Under'} the target by USD {abs(diff):.0f}")
 
 # ------------------------------------------------------------------ output
 order = [f"R{i}" for i in range(1, 18)]
