@@ -3,9 +3,9 @@ doc_id: PVT-DDR-001
 title: PVTrace TRL 2 review decisions
 project: PVTrace
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Items 10 and 11 decided by Amish on 2026-10-02 (PVT-DEC-001, items 5 and 4)
 ---
 
 # 0001: TRL 2 review decisions
 
 - **Date:** 2026-09-25
-- **Status:** items 1 to 9, 12 and 13 decided by Amish on 2026-09-25 (go with recommendation; see PVT-DDR-002). Items 10 and 11 have no recommendation and remain proposed, awaiting Amish.
+- **Status:** items 1 to 9, 12 and 13 decided by Amish on 2026-09-25 (go with recommendation; see PVT-DDR-002). Items 10 and 11, which had no recommendation here, were decided by Amish on 2026-10-02 as recommended in the design decisions register (PVT-DEC-001, items 5 and 4).
 
 ## Context
 
@@ -56,8 +60,8 @@ Table 2. Items open at v0.1 and their status now
 | # | Item | Status |
 | --- | --- | --- |
 | 9 | Budget: the TRL 2 review recommends raising `budget_usd` from $150 to $165 to cover items 3 and 4. The priced BOM is $163 | Decided by Amish, 2026-09-25: go with recommendation. `budget_usd` is now 165 in `project.yaml`; R17 is met ($164 with the sun hood, PVT-DDR-002) |
-| 10 | First co-design partner: a second-life panel refurbisher or recycler, or a TVET solar course | Proposed, awaiting Amish. No preference stated |
-| 11 | R3 at worst-case tolerance (16.4 ms at -20 % capacitance, PVT-CAL-001). Options: a fourth capacitor (8.8 mF, about +$6, case layout to be checked); select or measure capacitors so the bank is at least 6.4 mF; or relax the lower bound once the module capacitance of TOPCon and HJT cells is known | Proposed, awaiting Amish. No recommendation yet; new at TRL 3 |
+| 10 | First co-design partner: a second-life panel refurbisher or recycler, or a TVET solar course | **Decided by Amish, 2026-10-02:** first candidate type to approach (not yet agreed), a second-life panel refurbisher or recycler that tests used modules in volume, with a TVET solar course as a good second partner for the teaching use (PVT-DEC-001, item 5) |
+| 11 | R3 at worst-case tolerance (16.4 ms at -20 % capacitance, PVT-CAL-001). Options: a fourth capacitor (8.8 mF, about +$6, case layout to be checked); select or measure capacitors so the bank is at least 6.4 mF; or relax the lower bound once the module capacitance of TOPCon and HJT cells is known | **Decided by Amish, 2026-10-02:** each capacitor is measured at build and a set is selected that gives at least 6.4 mF; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it (PVT-DEC-001, item 4) |
 | 12 | Heat in sun (R13): light grey case, charger with temperature cut-off and a display sun hood. The first two are in the TRL 3 BOM at no added cost; the hood is not | Decided by Amish, 2026-09-25: go with recommendation. Printed sun hood added (`bom/bom.csv` line 15, `cad/src/model.py`, PVT-DWG-001 Rev P2) |
 | 13 | Case size grows to 220 x 130 x 80 mm to fit the third capacitor and the isolation board | Decided by Amish, 2026-09-25: go with recommendation. Already in the model; still inside R12 |
 

@@ -3,9 +3,9 @@ doc_id: PVT-BLD-001
 title: PVTrace prototype build plan
 project: PVTrace
 doc_type: Build plan
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: First build plan, with pictures by component and step; design made constructable (PVT-DDR-003)
+  - version: "0.2"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: Load capacitors measured and selected to at least 6.4 mF together (section 3.11; PVT-DEC-001, item 4)
 ---
 
 # PVTrace prototype build plan
@@ -322,7 +326,7 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **Case (line 1).** IP54 ABS, light grey, about 220 x 130 x 80 mm outside, lid on the large face screwing into four corner pillars, rubber corner bumpers, with two M16 and one M12 cable glands.
 - **Display board (line 3).** ESP32 board 86 x 50 mm with a 2.8 in 320 x 240 screen and microSD socket (ESP32-2432S028 class), with an 8 GB card and a 16-bit I2C ADC module (ADS1115 class) for the reference cell.
 - **Measurement board parts (line 4).** 4 milliohm 3 W four-terminal shunt, current-sense amplifier (INA240A2 class), 1 Mohm and 39 kohm 0.1 % divider, two-channel 12-bit 100 kS/s ADC (MCP3202 class), 4.096 V reference, protection diodes, perfboard 44 x 56 mm.
-- **Load capacitors (line 5).** Three 2200 µF 160 V snap-in electrolytics, about 35 x 60 mm, 105 °C.
+- **Load capacitors (line 5).** Three 2200 µF 160 V snap-in electrolytics, about 35 x 60 mm, 105 °C. Measure each one's capacitance with a meter before fitting and use a set that gives at least 6.4 mF together; buy one or two spare to choose from.
 - **Switches (line 6).** Two 150 V N-channel MOSFETs, about 10 milliohm, TO-220, a gate driver, the 25 x 10 mm bar (section 3.3), insulating pads and bushings.
 - **Resistors (line 7).** 22 ohm 50 W aluminium-clad resistor and a 10 kohm 3 W bleed resistor.
 - **Fuse (line 8).** 20 A gPV 10 x 38 mm fuse rated 1,000 V DC, in a DC-rated holder no more than 44 x 20 mm on its base.

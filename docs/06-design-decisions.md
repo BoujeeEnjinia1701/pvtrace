@@ -3,9 +3,9 @@ doc_id: PVT-DEC-001
 title: PVTrace design decisions register
 project: PVTrace
 doc_type: Design decisions register
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Register opened with the open decisions from the review note, the decision records and the build plan work; budget treated as a value-engineering target
+  - version: "0.2"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: Amish approved the recommendations of open items 1 to 6 on 2026-10-02; all moved to decisions made; capacitor selection added to the items to confirm; keypad cost noted
 ---
 
 # PVTrace design decisions register
@@ -21,14 +25,7 @@ Every design decision still to be made, and every decision made, in one place. E
 
 ## Open decisions
 
-| # | Decision needed | Options | Recommendation | Affects in the build | Source |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Design for construction (PVT-DDR-003 C1 to C11): chassis plate, fixings, window, hood tabs, display mounting, USB-C socket, sensor pod clip and the moves that clear the case pillars and gland nuts | Accept as made; or change any item | Accept: each change keeps what the tracer does | The whole build plan follows it | PVT-DDR-003, Table 1 |
-| 2 | Which side of the isolation barrier reads the sensor pod | (a) controller side through its own 16-bit ADC (+$3, as modelled); (b) PV side through a second ADC on the measurement board | (a): the pod is handled and clipped to a frame that may be earthed | Pod wiring (build plan section 3.4.1, wire 10); BOM line 3 | PVT-DDR-003, A1 |
-| 3 | R12 mass margin of about 14 g on estimated masses (1.49 kg against 1.5 kg) | (a) accept and weigh the prototype at TRL 4; (b) find mass now | (a) | None now; first check "Mass and size" | PVT-DDR-003, A2 |
-| 4 | R3 sweep time at worst-case capacitor tolerance (16.4 ms against 20 ms for the high-current module) | (a) a fourth capacitor (8.8 mF, about +$6; the case layout would need checking); (b) select or measure capacitors so the bank is at least 6.4 mF; (c) relax the 20 ms bound once the capacitance of TOPCon and HJT cells is known | None yet | Capacitor bank and plate layout if (a) | PVT-DDR-001 item 11; PVT-DDR-002 Table 2 |
-| 5 | First co-design partner | A second-life panel refurbisher or recycler, or a TVET solar course | None stated | None in the build | PVT-DDR-001 item 10; PVT-DDR-002 Table 2 |
-| 6 | Appearance model differences from the engineering model: radiused case corners, wrap-around corner boots, keypad and status LEDs, side grips, USB-C flap, labels, lead routing, pod fillets | Accept each as the look to aim for; or bring the renders back to the engineering model | Accept the case shape items; drop the keypad and LEDs unless a BOM line is added, since the display board is a touch screen | Renders only; a keypad would add a BOM line and lid holes | `docs/REVIEW.md`, 2026-09-26 session, items 1 to 4 |
+None. All open decisions were decided on 2026-10-02.
 
 ## To confirm when parts are bought
 
@@ -42,12 +39,14 @@ Every design decision still to be made, and every decision made, in one place. E
 | 6 | The isolation barrier parts' working voltage and test rating | The barrier must withstand module voltage with margin; checked by the 500 V insulation test | `docs/REVIEW.md`, TRL 3 safety concerns |
 | 7 | The USB-C socket has an M16 thread, IP65 or better with a tethered cap | Sets the left end hole and keeps IP54 | PVT-DDR-003 C10 |
 | 8 | The modules to be tested have frames 30 to 40 mm deep with a bottom flange | The pod clip grips the frame between its top jaw and thumb screw | PVT-DDR-003 C11 |
+| 9 | The three load capacitors, measured one by one, give at least 6.4 mF together; if not, select others from a larger batch | R3 at the 20 ms lower bound (decided 2026-10-02) | Decision of 2026-10-02 (open item 4); PVT-CAL-001 section 2 |
 
 ## Value engineering
 
 Value-engineering target: USD 165 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178 (USD 13 over the target). Main cost drivers and savings worth trying:
 
 - The largest lines are the display board with its ADC module (USD 21), the three load capacitors (USD 18), the DC isolator (USD 16), the measurement board parts (USD 16), the test leads (USD 16) and the sensor pod (USD 16).
+- The keypad and status LEDs decided on 2026-10-02 (open item 6) need a new BOM line, which will add a little to the USD 178 estimate.
 - Making the design constructable added USD 14: the chassis plate (USD 3), the USB-C socket (USD 5), the pod ADC module (USD 3), the pod clip and gland (USD 1) and fixings (USD 2).
 - Savings worth trying: a fused two-pole DC isolator in one body in place of the separate fuse holder and isolator (about USD 5 to 8, if one fits the lid); test leads made from one 2 m pair of PV cable with crimped MC4 connectors (about USD 4); buying the ESP32 board and ADC module as one bundle (about USD 2).
 
@@ -59,4 +58,10 @@ Value-engineering target: USD 165 (a hypothetical control target, not a limit). 
 | 2026-09-25 | `budget_usd` set to 165 (item 9); display sun hood and light grey case (item 12); 220 x 130 x 80 mm case (item 13); pitch and problem unchanged | Amish, same instruction | PVT-DDR-002 |
 | 2026-09-26 | PVTrace chosen for the first batch of product renders | Amish | `docs/REVIEW.md`, 2026-09-26 session |
 | 2026-10-01 | `budget_usd` is a value-engineering target, not a limit | Amish: "the budgets are a hypothethical control target to ensure we are thinking along a value engineering lens. its ok to ensure wording reflects that the hypothesis budget was x - the real cost being accrued is y" | `.kit/STANDARDS.md` section 18; this register |
-| 2026-10-01 | Design changed so it can be built (PVT-DDR-003 C1 to C11), under Amish's 2026-09-30 instruction: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." Open for his review (open decision 1) | Made under Amish's instruction | PVT-DDR-003 |
+| 2026-10-01 | Design changed so it can be built (PVT-DDR-003 C1 to C11), under Amish's 2026-09-30 instruction: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." Accepted on 2026-10-02 (below) | Made under Amish's instruction | PVT-DDR-003 |
+| 2026-10-02 | Open item 1: design for construction accepted: C1 to C11 and their knock-on changes, as made | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, Tables 1 and 2 |
+| 2026-10-02 | Open item 2: the sensor pod is read on the controller side of the isolation barrier through its own 16-bit ADC (about USD 3, as modelled) | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, A1 |
+| 2026-10-02 | Open item 3: the R12 mass margin of about 14 g is accepted, and the prototype is weighed at TRL 4 | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, A2 |
+| 2026-10-02 | Open item 4: R3 at worst-case tolerance: each capacitor is measured at build and a set is selected that gives at least 6.4 mF; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-001 item 11; PVT-DDR-002 Table 2 |
+| 2026-10-02 | Open item 5: first co-design partner, the first candidate type to approach (not yet agreed): a second-life panel refurbisher or recycler that tests used modules in volume, with a TVET solar course as a good second partner for the teaching use | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-001 item 10; PVT-DDR-002 Table 2 |
+| 2026-10-02 | Open item 6: the case shape items of the appearance model are accepted (corner radii, corner boots, side grips, USB-C flap, labels, lead routing, pod fillets); the keypad and status LEDs are kept, and a BOM line is added for them | Amish: "i approve your recommendations for all 555 open decisions." | `docs/REVIEW.md`, 2026-09-26 session, items 1 to 4 |

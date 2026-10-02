@@ -3,9 +3,9 @@ doc_id: PVT-PRC-001
 title: PVTrace design precis
 project: PVTrace
 doc_type: Design precis
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: "Constructable design (PVT-DDR-003): chassis plate, USB-C socket, fixings, pod clip; mass and cost updated; budget as a value-engineering target"
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: 'Decisions of 2026-10-02 carried in (PVT-DEC-001 items 2 to 6): capacitor selection for R3, pod read on the controller side, mass margin, partner type, keypad and status LEDs'
 ---
 
 # PVTrace design precis
@@ -107,7 +111,7 @@ Table 2. Sweep with a 6.6 mF load (single-diode model, time from 0 V to 99 % of 
 
 Assumptions: datasheet-class values; 56.6 mΩ loop resistance; module capacitance ignored (see PVT-CAL-001 section 2).
 
-- **Sweep time.** The high-current case meets the 20 ms lower bound of R3 at nominal capacitance (20.5 ms) but not at -20 % tolerance (16.4 ms). R3 therefore stays not met; the options are open in PVT-DDR-001 item 11.
+- **Sweep time.** The high-current case meets the 20 ms lower bound of R3 at nominal capacitance (20.5 ms) but not at -20 % tolerance (16.4 ms). R3 is not met with capacitors as bought. Amish decided on 2026-10-02 (PVT-DEC-001, item 4) that each capacitor is measured at build and a set giving at least 6.4 mF is selected, which holds about 20 ms; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it.
 - **Samples.** At 25,000 pairs per second a sweep yields 410 pairs or more (R4). Firmware interpolates each voltage to the time of its current sample, which removes up to 0.16 % error in Pmax.
 - **Resolution.** Voltage full scale 109.1 V, 26.6 mV per count; current full scale 20.48 A, 5.00 mA per count. After calibration about ±0.2 % of reading ±0.03 % of full scale (R5).
 - **Discharge.** 22 ohm with 6.6 mF gives a 145 ms time constant: 100 V falls below 30 V in 0.21 s with +20 % capacitance. Peak dump power is 455 W for milliseconds; at one sweep every 5 s the average is 1.6 W for the reference module and 6.6 W at 100 V. The 10 kohm bleed takes 100 V below 60 V in 40 s and draws 10 mA at 100 V, which firmware subtracts.
@@ -138,14 +142,14 @@ Items 1 to 8 were decided by Amish on 2026-09-25: go with recommendation (PVT-DD
 
 1. **Load type.** Capacitive load: simple, fast, low heat, proven in open designs.
 2. **Voltage and current rating.** 100 V, 20 A: single modules and two in series, below the 120 V DC extra-low-voltage limit. Two 450 W modules in series exceed it when cold and are refused.
-3. **Load capacitance.** 6.6 mF with three capacitors. It meets R3 at nominal capacitance but not at -20 % tolerance (open item 11).
+3. **Load capacitance.** 6.6 mF with three capacitors. It meets R3 at nominal capacitance but not at -20 % tolerance; the capacitors are measured at build and a set of at least 6.4 mF is selected (decided 2026-10-02, PVT-DEC-001 item 4).
 4. **Isolation of the controller from the PV side.** Option B: a digital isolator and isolated DC-DC converter between the measurement board and the controller, so a laptop on USB is not tied to PV potential.
 5. **Display and interface.** 2.8 in TFT plus phone export. A printed sun hood is fitted (item 12, decided); readability in direct sun is still not shown on paper (R13).
 6. **Irradiance sensing.** A small reference cell measured at short circuit and calibrated once against a pyranometer.
 7. **Controller.** ESP32 display board.
-8. **Grade thresholds.** As in the grading rules above, held in an editable table and still to be agreed with a second-life partner.
+8. **Grade thresholds.** As in the grading rules above, held in an editable table and still to be agreed with a second-life partner; the first candidate type to approach is a refurbisher or recycler that tests used modules in volume (decided 2026-10-02, PVT-DEC-001 item 5).
 
-Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target since 2026-10-01), the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Still proposed, awaiting Amish: the first co-design partner (item 10, no preference stated) and the R3 shortfall at tolerance (item 11, no recommendation yet).
+Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target since 2026-10-01), the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Decided by Amish on 2026-10-02 (PVT-DEC-001): the first co-design partner type (item 10) and the R3 shortfall at tolerance (item 11, capacitor selection at build). Also decided then: the pod is read on the controller side of the isolation barrier, the 14 g mass margin is accepted, and a keypad and status LEDs are added for input, since the display's touch screen sits behind the bonded window.
 
 ## Links to other lab projects
 
@@ -169,7 +173,7 @@ Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target
 
 ## Open questions
 
-- [ ] Is 20 ms the right lower bound on sweep time for TOPCon and HJT modules, or is a longer sweep needed?
+- [ ] Is 20 ms the right lower bound on sweep time for TOPCon and HJT modules, or is a longer sweep needed? Until capacitance data justify a change, the bound stays and the capacitor bank is selected to at least 6.4 mF (PVT-DEC-001, item 4).
 - [x] How to capture true Isc: extrapolate from the first samples, which start 1 to 2 % of Voc above zero (PVT-CAL-001); no negative pre-charge.
 - [ ] Which reference cell and calibration route give ±3 % or better at low cost?
 - [ ] Is a commodity TFT with the sun hood readable in sun, or is a transflective display needed? (Field check, TRL 4.)

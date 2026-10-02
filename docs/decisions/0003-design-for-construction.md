@@ -3,9 +3,9 @@ doc_id: PVT-DDR-003
 title: PVTrace design for construction
 project: PVTrace
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,12 +13,16 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Changes that make the concept physically buildable, with the reason for each; made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review
+- version: "0.2"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Accepted by Amish on 2026-10-02, including the recommendations for A1 and A2
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-10-01
-- **Status:** Draft. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review. The items in Table 3 are proposed, awaiting Amish.
+- **Status:** accepted. Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." This covers every change in Tables 1 and 2, as made, and the recommendations for A1 and A2 in Table 3, which are now decided as recommended and recorded in the design decisions register (PVT-DEC-001).
 
 ## Context
 
@@ -54,16 +58,17 @@ The changes keep what the instrument does: the same case, rating, load, isolatio
 | Documents | PVT-CAL-001 v0.3 (mass, cost), PVT-REQ-001 v0.5 (R12, R17), PVT-PRC-001 v0.5 (components, key numbers). No requirement changed status except R17, now reported against the value-engineering target. | Follows the model. |
 | Electrical and thermal | Unchanged: the sweep, discharge and heat calculations do not depend on how the parts are fixed. The discharge resistor now sits on a plastic plate rather than the floor; its free-air rating is to be confirmed when bought (design decisions register). | |
 
-*Table 3. Proposed, awaiting Amish.*
+*Table 3. Items proposed, then accepted by Amish as recommended on 2026-10-02.*
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
-| A1 | Which side of the isolation barrier reads the sensor pod. The pod is handled and clipped to a module frame that may be earthed. | (a) controller side, through its own 16-bit ADC module (+$3, as modelled); (b) PV side, through a second ADC on the measurement board, which would put the pod at PV potential. | (a): the pod stays at the safe, low-voltage side, as the USB port does. |
-| A2 | The R12 mass margin is about 14 g on estimated masses. | (a) accept and weigh the prototype at TRL 4; (b) find mass now (for example a thinner pod housing or shorter leads). | (a). |
+| A1 | Which side of the isolation barrier reads the sensor pod. The pod is handled and clipped to a module frame that may be earthed. | (a) controller side, through its own 16-bit ADC module (+$3, as modelled); (b) PV side, through a second ADC on the measurement board, which would put the pod at PV potential. | (a): the pod stays at the safe, low-voltage side, as the USB port does. **Accepted 2026-10-02.** |
+| A2 | The R12 mass margin is about 14 g on estimated masses. | (a) accept and weigh the prototype at TRL 4; (b) find mass now (for example a thinner pod housing or shorter leads). | (a). **Accepted 2026-10-02.** |
 
 ## Consequences
 
 - `design_state: constructable` in `project.yaml`. The build plan PVT-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); open items are in the design decisions register PVT-DEC-001.
+- With A1 and A2 accepted, the sensor pod is read on the controller side through its own 16-bit ADC, and the prototype is weighed at TRL 4 against R12.
 - Requirement status: three not met (R3 at worst-case tolerance, R13 display readability, R16 out of scope), two at risk (R7, R8), two not verifiable at TRL 3 (R6, R9), nine met, and R17 reported as USD 13 over the value-engineering target.
 - The photoreal renders (`media/render-*.png`), `media/card.png` and `media/social-preview.png` and the appearance model `cad/src/product_model.py` show the concept internals and the narrower hood. They need updating on Amish's Mac, where Blender is.
 - The case, display board, isolator, fuse holder and USB-C socket are chosen at TRL 4; their sizes and fixing patterns must be checked then and the drawings moved to suit.

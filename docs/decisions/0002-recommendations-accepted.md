@@ -3,9 +3,9 @@ doc_id: PVT-DDR-002
 title: PVTrace recommendations accepted
 project: PVTrace
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,12 +13,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's acceptance of all recommendations and the changes made in the repo
+- version: "0.2"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Items 10 and 11 decided by Amish on 2026-10-02 as recommended in PVT-DEC-001
 ---
 
 # 0002: Recommendations accepted
 
 - **Date:** 2026-09-25
-- **Status:** accepted. Every item with a recommendation is decided by Amish, 2026-09-25: go with recommendation. Items with no recommendation stay proposed, awaiting Amish.
+- **Status:** accepted. Every item with a recommendation is decided by Amish, 2026-09-25: go with recommendation. Items 10 and 11, which had no recommendation, were given recommendations in the design decisions register (PVT-DEC-001, items 5 and 4) and decided by Amish on 2026-10-02: "i approve your recommendations for all 555 open decisions."
 
 ## Context
 
@@ -43,14 +47,14 @@ Table 1. Items decided by Amish, 2026-09-25: go with recommendation
 | 12 | Heat and sun (R13) | Light grey case, charger with temperature cut-off and a display sun hood | New BOM line 15, printed PETG sun hood, 86 x 64 x 18 mm, $1.00; hood added to `cad/src/model.py` (no clashes; top at Z 98, level with the isolator knob, so the R12 envelope is unchanged); STEP and STL re-exported; PVT-DWG-001 Rev P1 to P2; concept media refreshed with callout 15; PVT-CAL-001 v0.2: parts $163 to $164, mass 1.41 kg to 1.43 kg. R13 display readability stays not met on paper until a field check (TRL 4, on hold) |
 | 13 | Case size | 220 x 130 x 80 mm | Status wording only; already in the model and drawing |
 
-### Items still open
+### Items left open by this record
 
-Table 2. Proposed, awaiting Amish
+Table 2. Items left open by this record, both decided on 2026-10-02
 
-| # | Item | Why it stays open |
+| # | Item | Decision |
 | --- | --- | --- |
-| 10 | First co-design partner: a second-life panel refurbisher or recycler, or a TVET solar course | No preference stated; no recommendation to accept |
-| 11 | R3 at worst-case capacitor tolerance (16.4 ms at -20 %): a fourth capacitor, selected capacitors of 6.4 mF or more, or relaxing the 20 ms bound | No recommendation was made at TRL 3 |
+| 10 | First co-design partner: a second-life panel refurbisher or recycler, or a TVET solar course | **Decided by Amish, 2026-10-02:** first candidate type to approach (not yet agreed), a second-life panel refurbisher or recycler that tests used modules in volume, with a TVET solar course as a good second partner for the teaching use (PVT-DEC-001, item 5) |
+| 11 | R3 at worst-case capacitor tolerance (16.4 ms at -20 %): a fourth capacitor, selected capacitors of 6.4 mF or more, or relaxing the 20 ms bound | **Decided by Amish, 2026-10-02:** each capacitor is measured at build and a set is selected that gives at least 6.4 mF; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it (PVT-DEC-001, item 4) |
 
 ### Cross-repo actions
 

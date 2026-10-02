@@ -3,9 +3,9 @@ doc_id: PVT-PRB-001
 title: PVTrace problem statement
 project: PVTrace
 doc_type: Problem statement
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.5"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: First co-design partner type decided on 2026-10-02 (PVT-DEC-001, item 5)
 ---
 
 # PVTrace problem statement
@@ -76,7 +80,7 @@ The gap PVTrace addresses is a handheld, battery-powered, open tracer that works
 
 ## Co-design checklist
 
-- [ ] Identify a second-life panel partner (refurbisher, recycler or reuse program) to agree grade thresholds and throughput.
+- [ ] Identify a second-life panel partner to agree grade thresholds and throughput. Decided by Amish, 2026-10-02 (PVT-DEC-001, item 5): the first candidate type to approach, not yet agreed, is a second-life panel refurbisher or recycler that tests used modules in volume, with a TVET solar course as a second partner for the teaching use.
 - [ ] Interview two or more small installers on which faults they meet most and how they find them today.
 - [ ] Confirm the module types in the partner's stock (cell count, Voc, Isc) to fix the voltage and current ranges.
 - [ ] Agree what a buyer needs to see on a printed or phone grade label.

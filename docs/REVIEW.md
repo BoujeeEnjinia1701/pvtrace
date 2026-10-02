@@ -249,3 +249,50 @@ The design changed visibly (wider sun hood with tabs, smaller window, USB-C sock
 ### Recommended next step
 
 Review PVT-DDR-003 and the design decisions register, decide open decisions 1 to 3, then update the renders on the Mac. TRL 4 (building to this plan) stays on hold until Amish says otherwise.
+
+## Session 2026-10-02: open decisions decided
+
+On 2026-10-02 Amish approved every recommendation written for the open decisions: "i approve your recommendations for all 555 open decisions." trl stays 3; nothing was built or tested.
+
+### Decisions recorded
+
+6 decisions recorded in the design decisions register (PVT-DEC-001, Decisions made, dated 2026-10-02): PVT-DDR-003 accepted as made (1); sensor pod read on the controller side through its own ADC (2); 14 g mass margin accepted, weighed at TRL 4 (3); capacitors measured and selected to at least 6.4 mF for R3 (4); first partner type (5), the first candidate to approach and not an agreed partner; case shape items accepted, keypad and status LEDs kept with a new BOM line (6).
+
+### Documents changed
+
+- `docs/06-design-decisions.md` (PVT-DEC-001 v0.2): all 6 open items moved to Decisions made; Open decisions now reads "None"; capacitor selection added to "To confirm when parts are bought" (item 9); keypad cost noted under Value engineering.
+- `docs/decisions/0003-design-for-construction.md` (PVT-DDR-003 v0.2): status line and Table 3 record acceptance of Tables 1 and 2 and A1 and A2; status stays Draft.
+- `docs/decisions/0002-recommendations-accepted.md` (PVT-DDR-002 v0.2): items 10 and 11 recorded as decided.
+- `docs/decisions/0001-trl2-review-decisions.md` (PVT-DDR-001 v0.3): items 10 and 11 recorded as decided.
+- `docs/01-problem.md` (PVT-PRB-001 v0.5): first partner type.
+- `docs/02-concept.md` (PVT-PRC-001 v0.6): capacitor selection rule for R3, partner type, keypad and LEDs, pod side and mass margin.
+- `docs/03-requirements.md` (PVT-REQ-001 v0.6): R3 and R12 status notes record the decisions; no status changed.
+- `docs/04-calcs/01-sizing.md` (PVT-CAL-001 v0.4): R3 row notes the capacitor selection rule and section 7 the accepted mass margin; no number changed.
+- `docs/05-build-plan.md` (PVT-BLD-001 v0.2): capacitor measurement and selection to at least 6.4 mF (section 3.11).
+- `bom/bom-notes.md`: the fourth capacitor option replaced by capacitor selection; the keypad line noted as a follow-up.
+- PDFs re-rendered with `python .kit/render.py`; superseded versions removed.
+
+No CAD model, BOM quantity or price, or picture was changed. Requirement status is unchanged until the calculations are rerun: R3, R13 and R16 not met, R7 and R8 at risk, R6 and R9 not verifiable at TRL 3, nine met, R17 USD 13 over the value-engineering target.
+
+### Follow-up actions to carry approved decisions into the design
+
+1. Decision 4 (calcs): Rerun `docs/04-calcs/sizing.py` for R3 with a selected bank of at least 6.4 mF and update `results.csv`, the R3 status in PVT-CAL-001, PVT-REQ-001 and the README.
+2. Decision 4 (bom): Decide whether BOM line 5 carries one or two spare capacitors for selection, and price them.
+3. Decision 6 (bom): Add a BOM line for the keypad and status LEDs, with an estimated price, and update the cost in PVT-CAL-001 section 7 and the value-engineering figures.
+4. Decision 6 (model): Add the keypad and status LEDs to `cad/src/model.py` (lid holes, wiring to the controller), regenerate the general arrangement, the lid making sketch and the build plan pictures and wiring list (sections 3.4.1 and 3.5).
+5. Decision 6 (pictures): Update `cad/src/product_model.py` to the constructable design (internals, wider hood) with the accepted case shape items, and regenerate the photoreal renders, `media/card.png` and `media/social-preview.png` on Amish's Mac.
+6. Decision 3 (docs): Weigh the prototype at TRL 4 against R12 (when TRL 4 is opened; on hold now).
+
+### Points found in the review
+
+- The constructable design has no usable input control: the display board's touch screen sits behind the bonded polycarbonate window (C2, C4), and no buttons are in the BOM. This affects open decision 6 and the build plan.
+- The cost is USD 178 against the USD 165 value-engineering target (USD 13 over); the keypad in item 6 will add a little more.
+- Renders still show the concept internals and the narrower hood.
+
+### Safety
+
+The sensor pod stays on the safe, low-voltage side of the isolation barrier. The keypad, once added, must also sit on the controller side. Capacitor selection does not change the discharge paths or the 33 J stored energy.
+
+### Recommended next step
+
+Add the keypad and status LEDs to the model and BOM, since without them the constructable design has no usable input control, then rerun R3 with the selection rule. TRL 4 remains on hold by Amish's instruction.

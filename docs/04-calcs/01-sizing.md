@@ -3,9 +3,9 @@ doc_id: PVT-CAL-001
 title: PVTrace sizing calculations
 project: PVTrace
 doc_type: Calculation note
-version: "0.3"
+version: "0.4"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -21,6 +21,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Constructable design (PVT-DDR-003); mass and cost updated; R17 reported against the value-engineering target
+- version: "0.4"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: R3 row notes the capacitor selection rule and section 7 the accepted mass margin, decided on 2026-10-02 (PVT-DEC-001, items 3 and 4); no number changed
 ---
 
 # PVTrace sizing calculations
@@ -143,7 +147,7 @@ Table 5. Mass estimate
 
 The window was 10 g in v0.2, too low for 3 mm polycarbonate; it is now computed from the model (16 g).
 
-R12 is met: 1.49 kg against 1.5 kg, with about 14 g to spare on estimated masses (open decision 3 in PVT-DEC-001). Over the bumpers the case is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob and sun hood, inside 250 x 150 x 100 mm.
+R12 is met: 1.49 kg against 1.5 kg, with about 14 g to spare on estimated masses (accepted by Amish on 2026-10-02, with the prototype weighed at TRL 4; PVT-DEC-001, item 3). Over the bumpers the case is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob and sun hood, inside 250 x 150 x 100 mm.
 
 The priced BOM totals **USD 178.00**. Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178, **USD 13 over the target**. The increase over v0.2 (USD 164) is the parts added to make the design buildable (PVT-DDR-003): the chassis plate (USD 3), the USB-C socket (USD 5), the pod ADC module (USD 3), the pod clip and gland (USD 1) and fixings (USD 2). Savings worth trying are listed in the design decisions register.
 
@@ -155,7 +159,7 @@ Table 6. Requirement status (from `docs/04-calcs/results.csv`)
 | --- | --- | --- | --- |
 | R1 | 0 to 100 V; high-voltage case 83 V at -10 °C; capacitors 160 V, MOSFETs 150 V | 0 to 100 V, below 120 V | Met (design review) |
 | R2 | 0 to 20.48 A full scale; shunt 1.6 W of 3 W at 20 A | 0 to 20 A | Met (design review) |
-| R3 | 20.5 ms high-current case at 6.6 mF nominal (16.4 ms at -20 %); 32 ms reference; up to 81 ms | 20 to 200 ms | **Not met** (worst-case tolerance) |
+| R3 | 20.5 ms high-current case at 6.6 mF nominal (16.4 ms at -20 %); 32 ms reference; up to 81 ms | 20 to 200 ms | **Not met** (worst-case tolerance of capacitors as bought; a bank selected to 6.4 mF or more at build was decided on 2026-10-02, PVT-DEC-001 item 4, and is not yet calculated) |
 | R4 | 410 pairs minimum | 200 or more | Met |
 | R5 | V ±0.17 % ±0.024 % FS; I ±0.21 % ±0.026 % FS | ±1 % of reading ±0.1 % FS | Met on paper (needs calibration) |
 | R6 | Instrument noise 0.08 % per sample | Pmax ±1 % over 3 sweeps | Not verifiable at TRL 3 |
