@@ -3,7 +3,7 @@ doc_id: PVT-DEC-001
 title: PVTrace design decisions register
 project: PVTrace
 doc_type: Design decisions register
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: Amish approved the recommendations of open items 1 to 6 on 2026-10-02; all moved to decisions made; capacitor selection added to the items to confirm; keypad cost noted
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Cost USD 192 (USD 27 over the target) with the keypad and status LEDs (BOM line 18) and a spare capacitor; R3 met on paper with the selected bank"
 ---
 
 # PVTrace design decisions register
@@ -43,10 +47,10 @@ None. All open decisions were decided on 2026-10-02.
 
 ## Value engineering
 
-Value-engineering target: USD 165 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178 (USD 13 over the target). Main cost drivers and savings worth trying:
+Value-engineering target: USD 165 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 192 (USD 27 over the target). Main cost drivers and savings worth trying:
 
-- The largest lines are the display board with its ADC module (USD 21), the three load capacitors (USD 18), the DC isolator (USD 16), the measurement board parts (USD 16), the test leads (USD 16) and the sensor pod (USD 16).
-- The keypad and status LEDs decided on 2026-10-02 (open item 6) need a new BOM line, which will add a little to the USD 178 estimate.
+- The largest lines are the display board with its ADC module (USD 21), the four load capacitors, three fitted and one spare (USD 24), the DC isolator (USD 16), the measurement board parts (USD 16), the test leads (USD 16) and the sensor pod (USD 16).
+- The decisions of 2026-10-02 added USD 14: the keypad and status LEDs (open item 6, new BOM line 18, USD 8) and a spare load capacitor for selecting the bank (open item 4, USD 6).
 - Making the design constructable added USD 14: the chassis plate (USD 3), the USB-C socket (USD 5), the pod ADC module (USD 3), the pod clip and gland (USD 1) and fixings (USD 2).
 - Savings worth trying: a fused two-pole DC isolator in one body in place of the separate fuse holder and isolator (about USD 5 to 8, if one fits the lid); test leads made from one 2 m pair of PV cable with crimped MC4 connectors (about USD 4); buying the ESP32 board and ADC module as one bundle (about USD 2).
 

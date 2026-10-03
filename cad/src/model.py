@@ -66,6 +66,11 @@ PARAMS = {
     "battery": (78.0, 20.0, 20.0), "battery_xy": (-55.0, 48.0),
     "isolator_r": 15.0, "isolator_xy": (78.0, 44.0), "isolator_z0": 30.0,
     "isolator_screw_dx": 21.0,
+    # Keypad and status LEDs (PVT-DEC-001 item 6, decided 2026-10-02): a 3-key membrane keypad bonded on
+    # the lid with its flat tail through a slot, and two 3 mm LEDs in panel clips, all on the controller side
+    "keypad": (64.0, 40.0, 0.8), "keypad_xy": (36.0, -34.0), "keypad_slot": (12.0, 1.6), "keypad_tail": (10.0, 0.3, 5.0),
+    "led_xy": ((14.0, -8.0), (26.0, -8.0)), "led_hole_r": 2.7, "led_flange_r": 3.5, "led_body_r": 2.5,
+    "led_nut_r": 3.4, "led_depth": 8.0,
     "knob_r": 14.0, "knob_h": 10.0,
     "lead_stub": 60.0,          # length of test lead shown leaving each gland
     # Sensor pod (item 12, PVT-DDR-003 C7)
@@ -207,7 +212,23 @@ def build_components(P=PARAMS):
         lid = lid - _cyl_z(2.2, H - t - 1, H + 1, sx_ + dx, sy_)
     for (hx, hy) in D["hood_screws"]:
         lid = lid - _cyl_z(1.7, H - t - 1, H + 1, hx, hy)
+    kx, ky = P["keypad_xy"]
+    slx, sly = P["keypad_slot"]
+    lid = lid - Pos(kx, ky + P["keypad"][1] / 2 - 4.0, H - t / 2) * Box(slx, sly, t + 2)       # keypad tail slot
+    for (lx, ly) in P["led_xy"]:
+        lid = lid - _cyl_z(P["led_hole_r"], H - t - 1, H + 1, lx, ly)                          # 5.4 mm LED holes
     C["lid"] = lid
+
+    # ---- 18 keypad (bought): membrane overlay bonded on the lid top, its tail through the slot
+    kw, kd, kt = P["keypad"]
+    tw, tt2, tl = P["keypad_tail"]
+    C["keypad"] = (Pos(kx, ky, H + kt / 2) * Box(kw, kd, kt)
+                   + Pos(kx, ky + kd / 2 - 4.0, H - t / 2 - tl / 2 + 0.5) * Box(tw, tt2, t + tl + 1.0))
+    # ---- 18 status LEDs (bought): 3 mm LEDs in panel clips, flange above the lid, nut below
+    C["leds"] = _fuse([_cyl_z(P["led_flange_r"], H, H + 1.0, lx, ly) + _cyl_z(P["led_body_r"], H - t - P["led_depth"] + 3.0, H, lx, ly)
+                       for (lx, ly) in P["led_xy"]])
+    C["led_nuts"] = _fuse([_cyl_z(P["led_nut_r"], H - t - 1.6, H - t, lx, ly) - _cyl_z(P["led_body_r"], H - t - 2, H - t + 0.1, lx, ly)
+                           for (lx, ly) in P["led_xy"]])
 
     # ---- window (made): clear PC bonded on the lid top, round the opening
     wx, wy = P["window"]
@@ -391,6 +412,7 @@ def build_parts(P=PARAMS):
         "pod": pod["housing"] + pod["cell"] + pod["clip"],
         "plate": C["plate"],
         "usb": C["usb"],
+        "keypad": C["keypad"] + C["leds"] + C["led_nuts"],
     }
     return parts
 
@@ -437,7 +459,8 @@ def constructability(P=PARAMS, verbose=True):
                   ("board_standoffs", "plate"), ("meas", "board_standoffs"), ("isolation", "board_standoffs"),
                   ("window", "lid"), ("hood", "lid"), ("hood_screws", "hood"), ("display_standoffs", "lid"),
                   ("controller", "display_standoffs"), ("display_nuts", "controller"), ("isolator", "lid"),
-                  ("isolator_screws", "lid"), ("isolator_screws", "isolator"), ("gland_nuts", "body"), ("glands", "body"), ("usb", "body"),
+                  ("isolator_screws", "lid"), ("isolator_screws", "isolator"), ("keypad", "lid"), ("leds", "lid"), ("led_nuts", "lid"),
+                  ("led_nuts", "leds"), ("gland_nuts", "body"), ("glands", "body"), ("usb", "body"),
                   ("usb_nut", "body"), ("cap_ties", "caps"), ("plate_screws", "plate_standoffs"), ("plate_screws", "plate"),
                   ("fet_screws", "fets"), ("plate_fixings", "plate")]
     for a, b in must_touch:
@@ -456,7 +479,10 @@ def constructability(P=PARAMS, verbose=True):
              ("cap_ties", "fet_bar", 0.5), ("cap_ties", "dump_res", 0.5), ("cap_ties", "body", 0.5),
              ("plate", "body", 0.5), ("hood", "isolator", 1.0), ("usb_nut", "gland_nuts", 1.0),
              ("plate_fixings", "cap_ties", 1.0), ("plate_fixings", "body", 1.0), ("plate_fixings", "plate_standoffs", 1.0),
-             ("fet_screws", "meas", 1.0), ("fet_screws", "isolation", 1.0)]
+             ("fet_screws", "meas", 1.0), ("fet_screws", "isolation", 1.0),
+             ("keypad", "hood", 3.0), ("keypad", "isolator", 3.0), ("keypad", "window", 3.0), ("leds", "hood", 5.0),
+             ("leds", "keypad", 2.0), ("leds", "isolator", 5.0), ("leds", "window", 5.0), ("keypad", "controller", 1.0),
+             ("keypad", "meas", 1.0), ("led_nuts", "meas", 1.0), ("led_nuts", "controller", 1.0), ("led_nuts", "display_standoffs", 1.0)]
     for a, b, m in clear:
         d = _dist(C[a], C[b])
         ok(f"clearance {m} mm: {a} / {b}", d >= m, f"{d:.2f} mm")
@@ -474,7 +500,7 @@ def constructability(P=PARAMS, verbose=True):
         v = (col & C["hood"]).volume
         ok(f"screwdriver reaches hood screw at ({sx:g}, {sy:g})", v < 0.5, f"{v:.1f} mm3 in the way")
     # the lid lifts straight off: nothing hung from the lid reaches into a body part's column
-    lid_parts = ["controller", "display_standoffs", "display_nuts", "isolator", "isolator_screws"]
+    lid_parts = ["controller", "display_standoffs", "display_nuts", "isolator", "isolator_screws", "keypad", "leds", "led_nuts"]
     for a in lid_parts:
         bb = C[a].bounding_box()
         col = Pos((bb.min.X + bb.max.X) / 2, (bb.min.Y + bb.max.Y) / 2, (bb.min.Z + 200) / 2) * Box(bb.size.X, bb.size.Y, 200 - bb.min.Z)
@@ -482,7 +508,7 @@ def constructability(P=PARAMS, verbose=True):
         ok(f"lid lifts straight off: {a}", v < 0.5, f"{v:.1f} mm3 in the way")
 
     # 5 envelope (R12): 250 x 150 x 100 mm or less including bumpers, knob and hood
-    asm = _fuse([C[k] for k in ("body", "lid", "window", "hood", "isolator")])
+    asm = _fuse([C[k] for k in ("body", "lid", "window", "hood", "isolator", "keypad", "leds")])
     bb = asm.bounding_box()
     ok("envelope inside 250 x 150 x 100 mm (glands excluded in length)", (P["case_l"] + P["bumper"]) <= 250 and bb.size.Y <= 150 and bb.max.Z <= 100,
        f"{P['case_l'] + P['bumper']:.0f} x {bb.size.Y:.0f} x {bb.max.Z:.0f} mm")

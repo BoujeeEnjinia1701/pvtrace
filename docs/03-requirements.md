@@ -3,7 +3,7 @@ doc_id: PVT-REQ-001
 title: PVTrace requirements
 project: PVTrace
 doc_type: Requirements
-version: "0.6"
+version: "0.7"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -33,11 +33,15 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: R3 and R12 status notes record the 2026-10-02 decisions (PVT-DEC-001, items 3 and 4); no status changed
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R3 now met on paper with the capacitor bank selected at build (PVT-CAL-001 v0.5); R17 restated to USD 192, USD 27 over the target; R12 margin about 6 g"
 ---
 
 # PVTrace requirements
 
-These requirements are proposals for review, not yet agreed with users, and will be revised after co-design (see PVT-PRB-001). The status column gives the design's position against each target from the calculations in PVT-CAL-001 (TRL 3). Three requirements are **not met** on paper (R3 at worst-case capacitor tolerance, R13 display readability, R16 out of scope), two are at risk (R7, R8) and two cannot be verified until hardware exists (R6, R9). R17 is reported against the value-engineering target (`budget_usd`, USD 165, a hypothetical control target, not a limit; Amish, 2026-10-01): the constructable design of PVT-DDR-003 is estimated at USD 178, USD 13 over the target. The design choices were decided by Amish on 2026-09-25 (go with recommendation; PVT-DDR-001 and PVT-DDR-002).
+These requirements are proposals for review, not yet agreed with users, and will be revised after co-design (see PVT-PRB-001). The status column gives the design's position against each target from the calculations in PVT-CAL-001 (TRL 3). Two requirements are **not met** on paper (R13 display readability, R16 out of scope), ten are met including R3 with the capacitor bank selected at build, two are at risk (R7, R8) and two cannot be verified until hardware exists (R6, R9). R17 is reported against the value-engineering target (`budget_usd`, USD 165, a hypothetical control target, not a limit; Amish, 2026-10-01): the constructable design of PVT-DDR-003 with the keypad, status LEDs and a spare capacitor is estimated at USD 192, USD 27 over the target. The design choices were decided by Amish on 2026-09-25 (go with recommendation; PVT-DDR-001 and PVT-DDR-002).
 
 The **reference module** is a 144 half-cell module of about 450 W: open-circuit voltage (Voc) about 49.5 V, short-circuit current (Isc) about 11.6 A. The **high-current case** is a 108 half-cell 182 mm module of about 410 W (Voc about 37.5 V, Isc about 13.9 A). The **high-voltage case** is two older 60-cell 250 W modules in series (Voc about 75 V, Isc about 8.9 A).
 
@@ -47,7 +51,7 @@ Table 1. Requirements
 | --- | --- | --- | --- | --- |
 | R1 | Voltage range | 0 to 100 V DC open circuit, including cold-weather Voc rise; hard limit below 120 V | Component ratings; calculation | Met by design review: high-voltage case 83 V at -10 °C; 160 V capacitors, 150 V MOSFETs. Two 450 W modules in series (109 V cold) are refused |
 | R2 | Current range | 0 to 20 A short circuit | Shunt and switch ratings | Met by design review: 20.48 A full scale; shunt 1.6 W of 3 W |
-| R3 | Sweep duration, to limit capacitive error in high-efficiency cells | 20 to 200 ms from Isc to Voc for any module in range | Sweep model; later bench sweep | **Not met** at worst-case tolerance with capacitors as bought: high-current case 20.5 ms at 6.6 mF nominal, 16.4 ms at -20 %; longest 81 ms. Amish decided on 2026-10-02 to measure the capacitors at build and select a set of at least 6.4 mF (PVT-DEC-001, item 4), which would hold about 20 ms; the status changes when the calculation is rerun with that rule |
+| R3 | Sweep duration, to limit capacitive error in high-efficiency cells | 20 to 200 ms from Isc to Voc for any module in range | Sweep model; later bench sweep | **Met on paper with a selected bank** (changed from not met on 2026-10-02): Amish decided to measure the capacitors at build and select a set of at least 6.4 mF (PVT-DEC-001, item 4). The high-current case then sweeps in 20.1 ms at 6.45 mF (19.9 ms at exactly 6.4 mF, so 6.45 mF is proposed, awaiting Amish); longest 81 ms. Capacitors as bought reach only 16.4 ms at -20 % |
 | R4 | Curve resolution | 200 or more V-I pairs per sweep | Sample-rate calculation | Met: 410 pairs or more |
 | R5 | Measurement accuracy after calibration | Voltage and current within ±1 % of reading ±0.1 % of full scale | Error budget; later check against a calibrated meter | Met on paper: about ±0.2 % of reading ±0.03 % of full scale after calibration |
 | R6 | Repeatability | Pmax within ±1 % over 3 consecutive sweeps at stable irradiance (±1 % change) | Later field test | Not verifiable at TRL 3; instrument noise about 0.08 % per sample |
@@ -56,12 +60,12 @@ Table 1. Requirements
 | R9 | Fault flags | Flag steps from bypass diode conduction (loss of one substring or more), raised series resistance, lowered shunt resistance and an Isc deficit against irradiance; shown within 5 s of the sweep | Rule definitions; later tests on modules with known faults | Not verifiable at TRL 3; about 7 or more samples per volt resolve a substring step |
 | R10 | Second-life grading | Grade A, B, C or reject from STC Pmax against nameplate, with thresholds held in an editable table that a partner can change | Rule review with partner | Met by design review; thresholds decided by Amish (PVT-DDR-001 item 8); a partner can still tune the table |
 | R11 | Safe connection and disconnection | Reverse polarity and over-voltage detected before the load connects; the circuit is never opened above 0.5 A; load capacitors below 30 V within 2 s after each sweep and below 60 V within 60 s if the controller fails | Circuit review; discharge calculation | Met: 0.21 s to 30 V; 40 s passive to 60 V; load switch held up to 6 ms past 99 % of Voc so it opens below 0.5 A |
-| R12 | Handheld | Mass 1.5 kg or less including leads and sensor pod; enclosure 250 x 150 x 100 mm or less | Mass estimate; model | Met: 1.49 kg for the constructable design (PVT-DDR-003), about 14 g to spare, accepted by Amish on 2026-10-02 with the prototype weighed at TRL 4 (PVT-DEC-001, item 3); 234 x 144 x 80 mm over bumpers, 98 mm to the knob and hood tops |
+| R12 | Handheld | Mass 1.5 kg or less including leads and sensor pod; enclosure 250 x 150 x 100 mm or less | Mass estimate; model | Met: 1.49 kg for the constructable design (PVT-DDR-003), about 6 g to spare after the keypad and LEDs (was 14 g), accepted by Amish on 2026-10-02 with the prototype weighed at TRL 4 (PVT-DEC-001, item 3); 234 x 144 x 80 mm over bumpers, 98 mm to the knob and hood tops |
 | R13 | Field conditions | Operate at 0 to 45 °C ambient in full sun; IP54 when closed; display readable in direct sun | Datasheets; heat model; later field check | IP54 met by design; **display readability not met** on paper: sun hood fitted (PVT-DDR-002), readability to be shown in a field check (TRL 4); heat at risk (about 56 °C inside a light case at 45 °C in sun) |
 | R14 | Battery life | 8 h of field use or 200 sweeps per charge; USB-C charging | Power budget | Met: 10.3 h |
 | R15 | Open data | Every sweep saved as CSV (raw V-I pairs, irradiance, temperature, time, module ID, flags, grade); export by USB or Wi-Fi to a phone | Design review (no firmware at TRL 3) | Met by design review |
 | R16 | Second-life safety screening | Detect insulation faults (cracked backsheet, wet leakage) before a module is resold | Not in this instrument | **Not met**: out of scope; an insulation tester is needed alongside PVTrace |
-| R17 | Cost | Parts for one prototype against the value-engineering target in `budget_usd` (USD 165) | Priced BOM (`bom/bom.csv`) | Value-engineering target: USD 165. Estimated cost of the constructable design: USD 178 (USD 13 over the target) |
+| R17 | Cost | Parts for one prototype against the value-engineering target in `budget_usd` (USD 165) | Priced BOM (`bom/bom.csv`) | Value-engineering target: USD 165. Estimated cost of the constructable design: USD 192 (USD 27 over the target) |
 
 ## Assumptions
 

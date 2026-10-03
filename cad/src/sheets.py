@@ -1,4 +1,4 @@
-"""PVTrace general arrangement drawing PVT-DWG-001 (Rev P3).
+"""PVTrace general arrangement drawing PVT-DWG-001 (Rev P4).
 
 Run from the repo root:  python cad/src/sheets.py
 Builds cad/drawings/PVT-DWG-001.svg, .pdf and .png from the parametric model.
@@ -20,11 +20,12 @@ work = ROOT / "cad/drawings/_views"
 views = project_views(asm, work)
 
 s = Sheet(project="PVTrace", title="General arrangement, handheld tracer", dwg_no="PVT-DWG-001",
-          rev="P3", author="Amish Chadha", date="2026-10-01", concept=True,
+          rev="P4", author="Amish Chadha", date="2026-10-02", concept=True,
           material="Case IP54 ABS, light grey; window and chassis plate PC; hood PETG. See bom/bom.csv, PVT-CAL-001",
           revisions=[("P1", "Preliminary GA, 6.6 mF and isolation barrier (PVT-DDR-001)", "2026-09-25", "AC"),
                      ("P2", "Display sun hood added (PVT-DDR-002)", "2026-09-25", "AC"),
-                     ("P3", "Constructable design: plate, fixings, USB-C (PVT-DDR-003)", "2026-10-01", "AC")])
+                     ("P3", "Constructable design: plate, fixings, USB-C (PVT-DDR-003)", "2026-10-01", "AC"),
+                     ("P4", "Keypad and status LEDs on the lid (PVT-DEC-001 item 6)", "2026-10-02", "AC")])
 s.add_ortho(views, ["front", "top", "right"])
 s.add_svg(views["iso"], 276, 40, 140, 76, label="Isometric view", sublabel="Not to scale")
 s.add_notes("Key dimensions and interfaces (mm)", [
@@ -35,12 +36,13 @@ s.add_notes("Key dimensions and interfaces (mm)", [
     "Chassis plate PC 1.5 on five 5 mm standoffs",
     f"Load: {P['n_caps']} x 2200 uF 160 V, 6.6 mF, 2 cable ties",
     "Isolation board between measurement side and controller",
+    "Lid: 3-key membrane keypad and two status LEDs, controller side",
     f"Window {P['window'][0]:.0f} x {P['window'][1]:.0f} bonded over {P['display_open'][0]:.0f} x {P['display_open'][1]:.0f} opening",
     "Display board on 4 spacers; hood screws hold both",
     "Rating 100 V DC, 20 A; 20 A gPV fuse; 2-pole DC isolator",
     "Stored energy up to 33 J; dump 22 ohm, bleed 10 kohm",
     "Mass about 1.49 kg with leads and pod (PVT-CAL-001)",
-    "Making sketches PVT-DWG-101 to 108",
+    "Making sketches PVT-DWG-101 to 108 (lid: 104)",
     "PRELIMINARY, NOT FOR FABRICATION",
 ], x=276, y=128, width=140)
 s.save(ROOT / "cad/drawings/PVT-DWG-001")

@@ -3,7 +3,7 @@ doc_id: PVT-CAL-001
 title: PVTrace sizing calculations
 project: PVTrace
 doc_type: Calculation note
-version: "0.4"
+version: "0.5"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -25,13 +25,17 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: R3 row notes the capacitor selection rule and section 7 the accepted mass margin, decided on 2026-10-02 (PVT-DEC-001, items 3 and 4); no number changed
+- version: "0.5"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "sizing.py rerun for the capacitor bank selected at build (6.45 mF; R3 and R4 met on paper), a spare capacitor and the keypad and status LEDs (BOM line 18): cost USD 192, USD 27 over the target; mass 1,494 g, margin about 6 g; results.csv regenerated"
 ---
 
 # PVTrace sizing calculations
 
-On paper, PVTrace meets nine of its seventeen requirements (R1, R2, R4, R5, R10, R11, R12, R14, R15); R17 (cost) is reported against the value-engineering target and is USD 13 over it. Three are **not met**: R3 (sweep time) at worst-case capacitor tolerance, R13 (display readability in sun, not shown even with the sun hood, with heat at risk) and R16 (insulation screening, out of scope). R7 and R8 are **at risk** because they rest on the reference cell calibration, and R6 and R9 cannot be verified until hardware exists.
+On paper, PVTrace meets ten of its seventeen requirements (R1 to R5, R10, R11, R12, R14, R15); R3 is met with the capacitor bank selected at build (see section 2). R17 (cost) is reported against the value-engineering target and is USD 27 over it. Two are **not met**: R13 (display readability in sun, not shown even with the sun hood, with heat at risk) and R16 (insulation screening, out of scope). R7 and R8 are **at risk** because they rest on the reference cell calibration, and R6 and R9 cannot be verified until hardware exists.
 
-Three TRL 2 figures change. With the third capacitor (6.6 mF, PVT-DDR-001 decision 3) the high-current module sweeps in 20.5 ms at nominal capacitance but only 16.4 ms at the -20 % tolerance of electrolytic capacitors, so R3 is still not met in the worst case. The stored energy at 100 V rises from 22 J to 33 J. Battery life falls from about 16 h to 10.3 h once the isolation barrier (decision 4) and a 5 V boost are counted; R14 is still met. The module current at 99 % of Voc is up to 2.5 A, so the load switch must stay closed a few milliseconds past the end of the sweep to open below 0.5 A (R11).
+Three TRL 2 figures change. With the third capacitor (6.6 mF, PVT-DDR-001 decision 3) the high-current module sweeps in 20.5 ms at nominal capacitance but only 16.4 ms at the -20 % tolerance of electrolytic capacitors, so R3 was not met in the worst case as first drawn; Amish's decision of 2026-10-02 to select the bank at build changes that (section 2). The stored energy at 100 V rises from 22 J to 33 J. Battery life falls from about 16 h to 10.3 h once the isolation barrier (decision 4) and a 5 V boost are counted; R14 is still met. The module current at 99 % of Voc is up to 2.5 A, so the load switch must stay closed a few milliseconds past the end of the sweep to open below 0.5 A (R11).
 
 Version 0.2 applies Amish's decisions of 2026-09-25 (PVT-DDR-002): the budget in `project.yaml` rises from $150 to $165, and a printed display sun hood (BOM line 15, +$1, about 15 g) is added. The parts total goes from $163 to $164, so R17 changes from not met to met with a $1 margin. Mass goes from 1.41 kg to 1.43 kg (R12 still met); the hood top is level with the isolator knob at 98 mm, so the envelope does not change. No other result changes.
 
@@ -71,7 +75,8 @@ Table 2. Sweep with 6.6 mF (single-diode model)
 | 2 x 60-cell 250 W (high voltage) | 67.5 | 54.0 | 45.0 | 1,687 | 18.3 | 0.50 | 14.8 |
 | Rating limit, 100 V, 20 A | 37.7 | 30.1 | 25.1 | 942 | 32.3 | 1.13 | 6.6 |
 
-- **R3 is not met at worst-case tolerance.** The shortest sweep is 20.5 ms at nominal capacitance but 16.4 ms if the three capacitors are 20 % low. Holding 20 ms at -20 % needs 8.0 mF rated (6.4 mF actual), which is a fourth capacitor. The longest sweep, the high-voltage case with +20 % capacitance, is about 81 ms, well inside 200 ms. The 4.4 mF column reproduces the TRL 2 estimates (13, 21 and 43 ms) within 2 ms, which checks the TRL 2 scaling.
+- **R3 with capacitors as bought is not met at worst-case tolerance.** The shortest sweep is 20.5 ms at nominal capacitance but 16.4 ms if the three capacitors are 20 % low. Holding 20 ms at -20 % would need 8.0 mF rated, which is a fourth capacitor. Amish decided on 2026-10-02 (PVT-DEC-001, item 4) not to add one but to measure each capacitor at build and fit the best three.
+- **R3 with the selected bank.** The decided bank is 6.4 mF or more. On the high-current case 6.4 mF gives 19.9 ms, 0.1 ms short, and 20 ms needs 6.44 mF, so the calculation uses **6.45 mF** (proposed, awaiting Amish: the decided figure rounded up so the 20 ms bound holds). At 6.45 mF the high-current case sweeps in 20.05 ms, the shortest sweep of any case is 20.1 ms and the minimum is 501 V-I pairs, so **R3 and R4 are met on paper** with a bank selected to 6.45 mF or more. Three 2200 µF parts need an average of 2150 µF each, 2.3 % below rated, so BOM line 5 buys four and fits the best three (one spare). The longest sweep, the high-voltage case with +20 % capacitance, is about 81 ms, well inside 200 ms. The 4.4 mF column reproduces the TRL 2 estimates (13, 21 and 43 ms) within 2 ms, which checks the TRL 2 scaling.
 - **R4 is met.** The fewest pairs are 410 (high-current case, -20 % capacitance), against 200.
 - **Isc.** Loop resistance holds the module at 0.34 to 1.13 V at the first sample, 1 to 2 % of Voc, so firmware extrapolates Isc from the first samples. Pre-charging the bank negative is not needed.
 - **Module capacitance.** With a capacitive load dV/dt = I / C_load, so the module's own capacitance C_mod causes a current error of about C_mod / C_load, independent of the sweep time. An error of 0.5 % or less needs C_mod of 26 µF or less at the lowest load capacitance. The capacitance of TOPCon and HJT modules at MPP is not verified in this note; the 20 ms bound in R3 remains a working figure until a source or a measurement confirms it.
@@ -147,9 +152,9 @@ Table 5. Mass estimate
 
 The window was 10 g in v0.2, too low for 3 mm polycarbonate; it is now computed from the model (16 g).
 
-R12 is met: 1.49 kg against 1.5 kg, with about 14 g to spare on estimated masses (accepted by Amish on 2026-10-02, with the prototype weighed at TRL 4; PVT-DEC-001, item 3). Over the bumpers the case is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob and sun hood, inside 250 x 150 x 100 mm.
+R12 is met: 1.49 kg (1,494 g with the keypad and LEDs, 8 g) against 1.5 kg, with about 6 g to spare on estimated masses (was 14 g) (accepted by Amish on 2026-10-02, with the prototype weighed at TRL 4; PVT-DEC-001, item 3). Over the bumpers the case is 234 x 144 x 80 mm, 244 mm over the glands and 98 mm to the top of the isolator knob and sun hood, inside 250 x 150 x 100 mm.
 
-The priced BOM totals **USD 178.00**. Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178, **USD 13 over the target**. The increase over v0.2 (USD 164) is the parts added to make the design buildable (PVT-DDR-003): the chassis plate (USD 3), the USB-C socket (USD 5), the pod ADC module (USD 3), the pod clip and gland (USD 1) and fixings (USD 2). Savings worth trying are listed in the design decisions register.
+The priced BOM totals **USD 192.00**. Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 192, **USD 27 over the target**. Since v0.3 (USD 178) the total has risen by USD 14 for decisions of 2026-10-02: a spare load capacitor for selection (USD 6) and the keypad and status LEDs, BOM line 18 (USD 8: membrane keypad with printed overlay about USD 4.50, two LEDs with clips about USD 2, header and lead USD 1.50). The increase over v0.2 (USD 164) is the parts added to make the design buildable (PVT-DDR-003): the chassis plate (USD 3), the USB-C socket (USD 5), the pod ADC module (USD 3), the pod clip and gland (USD 1) and fixings (USD 2). Savings worth trying are listed in the design decisions register.
 
 ## 8. Results
 
@@ -159,8 +164,8 @@ Table 6. Requirement status (from `docs/04-calcs/results.csv`)
 | --- | --- | --- | --- |
 | R1 | 0 to 100 V; high-voltage case 83 V at -10 °C; capacitors 160 V, MOSFETs 150 V | 0 to 100 V, below 120 V | Met (design review) |
 | R2 | 0 to 20.48 A full scale; shunt 1.6 W of 3 W at 20 A | 0 to 20 A | Met (design review) |
-| R3 | 20.5 ms high-current case at 6.6 mF nominal (16.4 ms at -20 %); 32 ms reference; up to 81 ms | 20 to 200 ms | **Not met** (worst-case tolerance of capacitors as bought; a bank selected to 6.4 mF or more at build was decided on 2026-10-02, PVT-DEC-001 item 4, and is not yet calculated) |
-| R4 | 410 pairs minimum | 200 or more | Met |
+| R3 | 20.1 ms high-current case with the bank selected to 6.45 mF (19.9 ms at the decided 6.4 mF); 32 ms reference; up to 81 ms | 20 to 200 ms | Met on paper with a selected bank (PVT-DEC-001 item 4) |
+| R4 | 501 pairs minimum (high-current case, selected bank 6.45 mF) | 200 or more | Met |
 | R5 | V ±0.17 % ±0.024 % FS; I ±0.21 % ±0.026 % FS | ±1 % of reading ±0.1 % FS | Met on paper (needs calibration) |
 | R6 | Instrument noise 0.08 % per sample | Pmax ±1 % over 3 sweeps | Not verifiable at TRL 3 |
 | R7 | Irradiance ±3.6 to ±5.4 %; temperature ±2 °C budget | ±5 %, ±2 °C | At risk |
@@ -173,6 +178,6 @@ Table 6. Requirement status (from `docs/04-calcs/results.csv`)
 | R14 | 10.3 h, about 1,853 sweeps | 8 h or 200 sweeps | Met |
 | R15 | CSV fields defined in PVT-PRC-001; no firmware at TRL 3 | CSV per sweep, USB or Wi-Fi export | Met (design review) |
 | R16 | No insulation test in this instrument | Detect insulation faults | **Not met** (out of scope) |
-| R17 | USD 178 in parts | Value-engineering target USD 165 | Over the target by USD 13 |
+| R17 | USD 192 in parts | Value-engineering target USD 165 | Over the target by USD 27 |
 
 > **Safety:** These calculations cover a live DC instrument at up to 100 V and 20 A that stores up to 33 J. The discharge times assume both the active and passive paths are fitted and working; never rely on one alone, and treat the capacitors as charged until the display reads below 30 V. The heat results show the Li-ion cell can exceed its charging limit in sun; charge only in shade with the isolator open.

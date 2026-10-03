@@ -3,7 +3,7 @@ doc_id: PVT-PRC-001
 title: PVTrace design precis
 project: PVTrace
 doc_type: Design precis
-version: "0.6"
+version: "0.7"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -33,6 +33,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: 'Decisions of 2026-10-02 carried in (PVT-DEC-001 items 2 to 6): capacitor selection for R3, pod read on the controller side, mass margin, partner type, keypad and status LEDs'
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Keypad and status LEDs added to the model and BOM (line 18); capacitor selection calculated (R3 met on paper); cost USD 192 (USD 27 over the target); mass margin about 6 g"
 ---
 
 # PVTrace design precis
@@ -86,6 +90,7 @@ Table 1. Main components
 | 15 | Display sun hood, printed light grey PETG, 92 x 64 x 18 mm, three walls, a 20 mm roof lip and four screw tabs, open toward the user | Shades the display window to improve contrast in sun (PVT-DDR-002 item 12); its screws also hold the display board |
 | 16 | Chassis plate, 1.5 mm polycarbonate on five standoffs | Carries every part in the case body; lifts out as one unit (PVT-DDR-003) |
 | 17 | USB-C charging socket, IP65 with cap, in the left end | Charges the cell with the case closed (R14; PVT-DDR-003) |
+| 18 | Keypad, 3-key membrane, and two status LEDs on the lid, controller side | Starts a sweep and steps through menus; shows ready and live DC (PVT-DEC-001 item 6) |
 
 ![Figure 3. Exploded view with BOM callouts.](../media/exploded.png)
 
@@ -111,7 +116,7 @@ Table 2. Sweep with a 6.6 mF load (single-diode model, time from 0 V to 99 % of 
 
 Assumptions: datasheet-class values; 56.6 mΩ loop resistance; module capacitance ignored (see PVT-CAL-001 section 2).
 
-- **Sweep time.** The high-current case meets the 20 ms lower bound of R3 at nominal capacitance (20.5 ms) but not at -20 % tolerance (16.4 ms). R3 is not met with capacitors as bought. Amish decided on 2026-10-02 (PVT-DEC-001, item 4) that each capacitor is measured at build and a set giving at least 6.4 mF is selected, which holds about 20 ms; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it.
+- **Sweep time.** The high-current case meets the 20 ms lower bound of R3 at nominal capacitance (20.5 ms) but not at -20 % tolerance (16.4 ms). R3 is not met with capacitors as bought. Amish decided on 2026-10-02 (PVT-DEC-001, item 4) that each capacitor is measured at build and a set giving at least 6.4 mF is selected, which holds about 20 ms (20.05 ms on the high-current case at 6.45 mF, PVT-CAL-001 v0.5; 6.4 mF gives 19.9 ms, so 6.45 mF is proposed, awaiting Amish). R3 is met on paper with the selected bank; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it.
 - **Samples.** At 25,000 pairs per second a sweep yields 410 pairs or more (R4). Firmware interpolates each voltage to the time of its current sample, which removes up to 0.16 % error in Pmax.
 - **Resolution.** Voltage full scale 109.1 V, 26.6 mV per count; current full scale 20.48 A, 5.00 mA per count. After calibration about ±0.2 % of reading ±0.03 % of full scale (R5).
 - **Discharge.** 22 ohm with 6.6 mF gives a 145 ms time constant: 100 V falls below 30 V in 0.21 s with +20 % capacitance. Peak dump power is 455 W for milliseconds; at one sweep every 5 s the average is 1.6 W for the reference module and 6.6 W at 100 V. The 10 kohm bleed takes 100 V below 60 V in 40 s and draws 10 mA at 100 V, which firmware subtracts.
@@ -119,8 +124,8 @@ Assumptions: datasheet-class values; 56.6 mΩ loop resistance; module capacitanc
 - **Battery.** 0.85 W at 5 V (controller, display and isolated side), 0.94 W from the cell: about 10.3 h from a 3,000 mAh 18650.
 - **Heat.** In full sun at 45 °C ambient the inside of a light grey case reaches about 56 °C, a dark case about 73 °C. The case is therefore light grey, the charger has a temperature cut-off, a printed hood shades the display, and the tracer should stay in shade between sweeps.
 - **STC uncertainty.** Root-sum-square ±3.7 to ±5.4 %; R8 (±5 %) needs a reference cell calibrated within ±4.5 %.
-- **Mass.** About 1.49 kg with leads, sensor pod, sun hood and chassis plate (R12 met, about 14 g to spare).
-- **Cost.** Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 178 (USD 13 over the target; see `bom/bom.csv`).
+- **Mass.** About 1.49 kg with leads, sensor pod, sun hood and chassis plate (R12 met, about 6 g to spare after the keypad and LEDs).
+- **Cost.** Value-engineering target: USD 165 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 192 (USD 27 over the target; see `bom/bom.csv`), including a spare load capacitor for selection and the keypad and status LEDs.
 
 ## Fault flags and grading (draft rules)
 
@@ -149,7 +154,7 @@ Items 1 to 8 were decided by Amish on 2026-09-25: go with recommendation (PVT-DD
 7. **Controller.** ESP32 display board.
 8. **Grade thresholds.** As in the grading rules above, held in an editable table and still to be agreed with a second-life partner; the first candidate type to approach is a refurbisher or recycler that tests used modules in volume (decided 2026-10-02, PVT-DEC-001 item 5).
 
-Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target since 2026-10-01), the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Decided by Amish on 2026-10-02 (PVT-DEC-001): the first co-design partner type (item 10) and the R3 shortfall at tolerance (item 11, capacitor selection at build). Also decided then: the pod is read on the controller side of the isolation barrier, the 14 g mass margin is accepted, and a keypad and status LEDs are added for input, since the display's touch screen sits behind the bonded window.
+Also decided by Amish on 2026-09-25: the $165 budget (a value-engineering target since 2026-10-01), the sun hood and the 220 x 130 x 80 mm case (items 9, 12 and 13). Decided by Amish on 2026-10-02 (PVT-DEC-001): the first co-design partner type (item 10) and the R3 shortfall at tolerance (item 11, capacitor selection at build). Also decided then: the pod is read on the controller side of the isolation barrier, the 14 g mass margin is accepted, and a keypad and status LEDs (BOM line 18, lid slot and two holes) are added for input, since the display's touch screen sits behind the bonded window.
 
 ## Links to other lab projects
 

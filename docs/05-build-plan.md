@@ -3,7 +3,7 @@ doc_id: PVT-BLD-001
 title: PVTrace prototype build plan
 project: PVTrace
 doc_type: Build plan
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: Load capacitors measured and selected to at least 6.4 mF together (section 3.11; PVT-DEC-001, item 4)
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Keypad and status lights added (BOM line 18; lid slot and two holes, wiring item 11, step 9); capacitor buying changed to four with one spare; costs and figures brought into line; 19 components"
 ---
 
 # PVTrace prototype build plan
@@ -27,9 +31,9 @@ revisions:
 
 ![Figure 1. Every component, pulled apart and numbered in build order](05-build-plan/overview.png)
 
-*Figure 1. Every component pulled apart and numbered in build order. The case parts are stacked over the body; the sensor pod, 18, is on the left.*
+*Figure 1. Every component pulled apart and numbered in build order. The case parts are stacked over the body; the sensor pod, 19, is on the left.*
 
-The prototype is one handheld PVTrace: a light grey plastic case, 220 x 130 x 80 mm, with two test leads leaving its right end, a DC isolator knob and a display under a small sun hood on its lid, and a sensor pod on a 3 m cable that clips to the frame of the module under test. Inside, a clear plastic chassis plate carries every part in the body: three large capacitors that form the sweep load, a bar with two switching transistors (MOSFETs), a discharge resistor, a fuse, a cell holder with its charger, and two hand-wired boards that measure the module and keep it electrically separate from the controller side. Figure 1 shows the 18 components in the order you make or fit them. Eight are made in a small workshop: the drilled case body, the chassis plate, the MOSFET bar, the cut and drilled lid, the window, and three 3D prints (the sun hood, the pod housing and the pod clip). Everything else is bought and fitted. The work is drilling a plastic case, cutting and drilling plastic sheet, drilling and tapping one aluminium bar, three prints, and wiring bought modules and perfboard. The parts cost about $178 from the bill of materials.
+The prototype is one handheld PVTrace: a light grey plastic case, 220 x 130 x 80 mm, with two test leads leaving its right end, a DC isolator knob, a three-key keypad with two status lights and a display under a small sun hood on its lid, and a sensor pod on a 3 m cable that clips to the frame of the module under test. Inside, a clear plastic chassis plate carries every part in the body: three large capacitors that form the sweep load, a bar with two switching transistors (MOSFETs), a discharge resistor, a fuse, a cell holder with its charger, and two hand-wired boards that measure the module and keep it electrically separate from the controller side. Figure 1 shows the 19 components in the order you make or fit them. Eight are made in a small workshop: the drilled case body, the chassis plate, the MOSFET bar, the cut and drilled lid, the window, and three 3D prints (the sun hood, the pod housing and the pod clip). Everything else is bought and fitted. The work is drilling a plastic case, cutting and drilling plastic sheet, drilling and tapping one aluminium bar, three prints, and wiring bought modules and perfboard. The parts cost about $192 from the bill of materials.
 
 > **Safety:** PVTrace connects to solar modules that are live whenever light falls on them, at up to 100 V DC and 20 A, and its capacitors store up to 33 J. Build and check it on a bench supply first; connect it to a module only at stop S5 in section 6, with the isolator open while connecting, and never open the case with the leads connected. Treat the capacitors as charged until the display reads below 30 V and a meter confirms it. The cell is lithium-ion: keep it out of its holder until stop S1, and charge it only in shade, on a non-flammable surface, never unattended.
 
@@ -186,13 +190,14 @@ Wire it like this, with stranded copper, ferrules on every screw terminal and he
 8. Cell and charger to the isolation board and the display board: 0.5 mm², through the 5 V boost.
 9. USB-C socket to the charger input: 0.5 mm².
 10. Sensor pod cable through its gland to the display board's ADC module and the probe input: 0.25 mm².
-11. The isolator and the display board are in the lid. Leave a 150 mm service loop on every lead to the lid so it can be laid beside the case open.
+11. The keypad and its two status lights go to the display board on a 6-way lead of 0.25 mm² wire: three keys, two lights and a common return. Fit a header on the display board's spare pins and a matching plug on the lead; the keypad's own flat tail plugs into a 6-way socket at the end of the lead. This is on the controller side of the isolation barrier.
+12. The isolator, the keypad, the lights and the display board are in the lid. Leave a 150 mm service loop on every lead to the lid so it can be laid beside the case open.
 
 Keep the PV-side wires and the controller-side wires apart, at least 8 mm on the plate, and cross the barrier only at the isolation board.
 
 **Check before moving on.** With no cell, no fuse and the isolator open: every wire continues end to end; the test leads read open to the USB-C socket shell; every wire is labelled.
 
-### 3.5 Lid, cut and drilled, with the DC isolator
+### 3.5 Lid, cut and drilled, with the DC isolator, keypad and status lights
 
 ![Figure 14. Cutting and drilling sketch of the lid](../cad/drawings/PVT-DWG-104.png)
 
@@ -200,9 +205,9 @@ Keep the PV-side wires and the controller-side wires apart, at least 8 mm on the
 
 ![Figure 15. Lid cut-out and hole positions](05-build-plan/lid-holes.png)
 
-*Figure 15. The display opening, the four display screw holes and the isolator holes, measured from the left end and the front face.*
+*Figure 15. The display opening, the four display screw holes, the isolator holes, the keypad slot and the two status light holes, measured from the left end and the front face.*
 
-**What it is and what it is made from.** The case's own lid, 3 mm ABS, with a display opening and seven holes.
+**What it is and what it is made from.** The case's own lid, 3 mm ABS, with a display opening, a narrow slot for the keypad tail and nine holes.
 
 **How to make it.**
 
@@ -210,19 +215,21 @@ Keep the PV-side wires and the controller-side wires apart, at least 8 mm on the
 2. Drill a 6 mm hole in each corner of the opening, cut between them with a fine saw, and file the edges straight.
 3. Drill the four 3.4 mm display screw holes at D1 to D4 in Figure 15.
 4. DC isolator: a 24 mm hole centred 188 mm from the left end and 109 mm from the front, and two 4.4 mm holes 21 mm left and right of it. Check the isolator maker's cut-out drawing first and follow it if it differs.
-5. Deburr, peel the tape and clean with soap and water.
+5. Keypad tail slot: a 12 x 1.6 mm slot centred 146 mm from the left end and 47 mm from the front, long side across the lid. Drill a 2 mm hole at each end, cut between them with a fine saw and file it smooth.
+6. Two 5.4 mm holes for the status lights, 124 mm and 136 mm from the left end and 57 mm from the front.
+7. Deburr, peel the tape and clean with soap and water.
 
 **How it fits the parts next to it.**
 
 ![Figure 16. Step 9 picture: the isolator into the lid](05-build-plan/step-09.png)
 
-*Figure 16. The isolator body goes up from below until its flange meets the lid; the maker's two screws go down from above; then the knob and handle.*
+*Figure 16. The isolator body goes up from below until its flange meets the lid; the maker's two screws go down from above; then the knob and handle. The two status lights clip into their holes and the keypad is bonded on with its tail through the slot.*
 
 ![Figure 17. Joint 6: the DC isolator through the lid](05-build-plan/joint-06.png)
 
 *Figure 17. The isolator hangs from the lid on its own flange and lifts out with the lid.*
 
-**Check before moving on.** The isolator turns cleanly between its two positions; the lid closes on the body with the isolator 2.5 mm above the measurement board.
+**Check before moving on.** The isolator turns cleanly between its two positions; the lid closes on the body with the isolator 2.5 mm above the measurement board; the keypad lies flat with its tail through the slot and clear of the sun hood and the isolator; the two lights sit flush.
 
 ### 3.6 Window
 
@@ -326,7 +333,7 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **Case (line 1).** IP54 ABS, light grey, about 220 x 130 x 80 mm outside, lid on the large face screwing into four corner pillars, rubber corner bumpers, with two M16 and one M12 cable glands.
 - **Display board (line 3).** ESP32 board 86 x 50 mm with a 2.8 in 320 x 240 screen and microSD socket (ESP32-2432S028 class), with an 8 GB card and a 16-bit I2C ADC module (ADS1115 class) for the reference cell.
 - **Measurement board parts (line 4).** 4 milliohm 3 W four-terminal shunt, current-sense amplifier (INA240A2 class), 1 Mohm and 39 kohm 0.1 % divider, two-channel 12-bit 100 kS/s ADC (MCP3202 class), 4.096 V reference, protection diodes, perfboard 44 x 56 mm.
-- **Load capacitors (line 5).** Three 2200 µF 160 V snap-in electrolytics, about 35 x 60 mm, 105 °C. Measure each one's capacitance with a meter before fitting and use a set that gives at least 6.4 mF together; buy one or two spare to choose from.
+- **Load capacitors (line 5).** Three 2200 µF 160 V snap-in electrolytics, about 35 x 60 mm, 105 °C. Measure each one's capacitance with a meter before fitting and use a set that gives at least 6.4 mF together; buy four and fit the best three (one spare, about $6). If no three of the four reach 6.45 mF together, buy more from the same batch.
 - **Switches (line 6).** Two 150 V N-channel MOSFETs, about 10 milliohm, TO-220, a gate driver, the 25 x 10 mm bar (section 3.3), insulating pads and bushings.
 - **Resistors (line 7).** 22 ohm 50 W aluminium-clad resistor and a 10 kohm 3 W bleed resistor.
 - **Fuse (line 8).** 20 A gPV 10 x 38 mm fuse rated 1,000 V DC, in a DC-rated holder no more than 44 x 20 mm on its base.
@@ -335,6 +342,7 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **Test leads (line 11).** Two 1 m lengths of 4 mm² double-insulated PV cable, red and black, with brand-matched MC4 connectors from one maker.
 - **Sensor pod parts (line 12).** Encapsulated mono-Si reference cell about 80 x 50 mm with its shunt, waterproof DS18B20 probe with a foam shade, M12 cable gland, M6 thumb screw, two M4 heat-set inserts, 3 m cable with a connector.
 - **Isolation barrier (line 14).** Four-channel digital isolator (ISO7741 or ADuM1401 class) and a 1 W isolated 5 V to 5 V converter on perfboard 30 x 24 mm.
+- **Keypad and status lights (line 18).** A blank three-key membrane switch about 64 x 40 mm with a flat tail and a self-adhesive back, with a printed overlay label; two 3 mm LEDs (green for ready, amber for live DC) in 5.4 mm panel clips; a 6-way lead and header. About $8.
 - **USB-C socket (line 17).** Panel mounting, IP65 or better, tethered cap, M16 thread with locknut, 0.3 m lead.
 - **Fixings and consumables (line 13).** Five M3 x 5 mm hex nylon standoffs with five M3 x 5 countersunk and five M3 x 4 pan-head screws; four M3 x 20 pan-head screws with sealing washers and nuts, four 7 mm spacers; M3 x 8 screws and nuts for the holders and resistor; eight 6 mm nylon standoffs; two 200 mm cable ties; neutral-cure silicone; 4 mm closed-cell adhesive gasket tape; wire in 4, 2.5, 0.5 and 0.25 mm², ferrules, heat-shrink, labels.
 
@@ -390,11 +398,11 @@ Lower the plate past the corner pillars onto the standoffs and fit the five M3 p
 
 Clean the lid and the window with isopropyl alcohol. Peel the film from the underside, centre the window over the opening and press the gasket tape down all round for 30 seconds. Peel the top film last.
 
-### Step 9: DC isolator into the lid
+### Step 9: DC isolator, keypad and status lights into the lid
 
 ![Step 9](05-build-plan/step-09.png)
 
-The body up from below until its flange meets the lid; the maker's two screws down from above; then the knob and handle. Set it to open (OFF).
+The body up from below until its flange meets the lid; the maker's two screws down from above; then the knob and handle. Set it to open (OFF). Clip the two status lights into their holes with their nuts under the lid. Peel the backing from the keypad, pass its tail through the slot and press it flat for 30 seconds.
 
 ### Step 10: sun hood on top, display board underneath
 
@@ -459,10 +467,10 @@ Stop at each point. Carry on only when everything listed is true.
 
 ## 8. Where the numbers come from
 
-- Model and constructability checks: `cad/src/model.py` (`python cad/src/model.py --check`, 183 checks); STEP and STL exports in `cad/step/` and `cad/stl/`.
+- Model and constructability checks: `cad/src/model.py` (`python cad/src/model.py --check`, 206 checks); STEP and STL exports in `cad/step/` and `cad/stl/`.
 - Pictures: `cad/src/build_plan_media.py`, using `.kit/build_views.py`; written to `docs/05-build-plan/` and `cad/drawings/PVT-DWG-101` to `PVT-DWG-108`.
-- General arrangement: `cad/drawings/PVT-DWG-001.pdf`, Rev P3.
-- Calculations: `docs/04-calcs/01-sizing.md` (PVT-CAL-001 v0.3) and `docs/04-calcs/sizing.py`: sweep, discharge, heat, battery, mass and cost.
+- General arrangement: `cad/drawings/PVT-DWG-001.pdf`, Rev P4.
+- Calculations: `docs/04-calcs/01-sizing.md` (PVT-CAL-001 v0.5) and `docs/04-calcs/sizing.py`: sweep, discharge, heat, battery, mass and cost.
 - Bill of materials: `bom/bom.csv`.
 - Decisions: `docs/decisions/0003-design-for-construction.md` (PVT-DDR-003), with PVT-DDR-001 and PVT-DDR-002; the design decisions register `docs/06-design-decisions.md` (PVT-DEC-001).
-- Requirements: `docs/03-requirements.md` (PVT-REQ-001 v0.5).
+- Requirements: `docs/03-requirements.md` (PVT-REQ-001 v0.7).

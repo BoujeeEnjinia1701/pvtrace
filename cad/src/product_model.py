@@ -26,7 +26,7 @@ sys.path.insert(0, str(HERE.parents[1] / ".kit"))
 
 from build123d import (Axis, Box, Circle, Compound, Cylinder, Edge, Plane, Pos, RectangleRounded,
                        RegularPolygon, Rot, Solid, Sphere, Spline, Text, Vector, extrude, fillet, sweep)
-from model import PARAMS, build_parts
+from model import PARAMS, build_components, build_parts, derived
 
 TITLE = "PVTrace: handheld solar panel IV curve tracer"
 
@@ -327,16 +327,16 @@ def _internals(P, M, add):
     # floor-mounted boards: PCB plate plus a few component blocks, within the model.py envelopes
     def board(key, bom, name, comps, color=C_PCB_GREEN, lift=(0, 0, 95)):
         s = P[key]; x, y = P[key + "_xy"]
-        plate = _prism(s[0], s[1], 1.5, t + 4.0, 1.6, x=x, y=y)
+        plate = _prism(s[0], s[1], 1.5, t + 6.0, 1.6, x=x, y=y)      # 6 mm standoffs (model.py board_standoff)
         posts = None
         for sx in (-1, 1):
             for sy in (-1, 1):
-                p = Pos(x + sx * (s[0] / 2 - 3), y + sy * (s[1] / 2 - 3), t + 2.0) * Cylinder(1.8, 4.0)
+                p = Pos(x + sx * (s[0] / 2 - 3), y + sy * (s[1] / 2 - 3), t + 3.0) * Cylinder(1.8, 6.0)
                 posts = p if posts is None else posts + p
         add(name, plate + posts, color, "plastic", bom, "internal", lift)
         parts = None
         for (dx, dy, lx, ly, lz) in comps:
-            b = Pos(x + dx, y + dy, t + 5.6 + lz / 2) * Box(lx, ly, lz)
+            b = Pos(x + dx, y + dy, t + 7.6 + lz / 2) * Box(lx, ly, lz)
             parts = b if parts is None else parts + b
         add(name + " components", parts, C_CHIP, "plastic", bom, "internal", lift)
         return x, y
@@ -344,7 +344,7 @@ def _internals(P, M, add):
     mx, my = board("meas", 4, "Measurement board",
                    [(-12, 8, 8, 8, 2.0), (6, 8, 6, 5, 1.6), (14, -6, 10, 6, 1.5), (-16, -10, 12, 4, 1.2)],
                    lift=(0, 0, 95))
-    shunt = Pos(mx - 2, my - 12, P["wall"] + 5.6 + 2.5) * Box(20.0, 5.0, 5.0)
+    shunt = Pos(mx - 2, my - 12, P["wall"] + 7.6 + 2.5) * Box(20.0, 5.0, 5.0)
     add("Four-terminal shunt (metal)", shunt, "#C08A55", "metal", 4, "internal", (0, 0, 95))
     board("isolation", 14, "Isolation board", [(-6, 0, 8, 7, 1.6), (7, 2, 12, 10, 6.0)], lift=(0, 0, 95))
 
@@ -513,23 +513,23 @@ def product_parts(P=PARAMS):
         head += Pos(x, y, H - 8.0) * Cylinder(1.5, 14.0)
         add(f"Lid screw {i + 1}", head, C_METAL, "metal", 13, "shell", (0, 0, LID_UP + 50))
 
-    # membrane keypad: dark overlay, teal sweep key, two menu keys, status LEDs
-    kx, ky = 36.0, -34.0
-    pad = _prism(64.0, 40.0, 4.0, H, 0.4, x=kx, y=ky)
-    add("Keypad overlay", pad, "#30353C", "plastic", 3, "shell", (0, 0, LID_UP))
-    sweep_key = Pos(kx + 16.0, ky, H + 0.4) * extrude(Circle(8.5), amount=1.8)
+    # membrane keypad (BOM 18): dark overlay, teal sweep key, two menu keys; two status LEDs above it (model.py positions)
+    kx, ky = P["keypad_xy"]
+    kw, kd, kt = P["keypad"]
+    pad = _prism(kw, kd, 4.0, H, kt, x=kx, y=ky)
+    add("Keypad overlay", pad, "#30353C", "plastic", 18, "shell", (0, 0, LID_UP))
+    sweep_key = Pos(kx + 16.0, ky, H + kt) * extrude(Circle(8.5), amount=1.8)
     sweep_key = _fillet_try(sweep_key, _top_edges(sweep_key), [1.0, 0.6])
-    add("Sweep key", sweep_key, C_ACCENT, "plastic", 3, "shell", (0, 0, LID_UP))
+    add("Sweep key", sweep_key, C_ACCENT, "plastic", 18, "shell", (0, 0, LID_UP))
     keys = None
     for dy in (-8.0, 8.0):
-        k = _prism(12.0, 9.0, 2.0, H + 0.4, 1.2, x=kx - 12.0, y=ky + dy)
+        k = _prism(12.0, 9.0, 2.0, H + kt, 1.2, x=kx - 12.0, y=ky + dy)
         k = _fillet_try(k, _top_edges(k), [0.6, 0.3])
         keys = k if keys is None else keys + k
-    add("Menu keys", keys, "#6B7280", "plastic", 3, "shell", (0, 0, LID_UP))
-    leds = Pos(kx - 26.0, ky + 8.0, H + 0.4) * Cylinder(1.4, 1.0) + Pos(kx - 26.0, ky + 8.0, H + 0.9) * Sphere(1.4)
-    add("Status LED ready (green)", leds, "#22C55E", "emissive", 3, "shell", (0, 0, LID_UP))
-    led2 = Pos(kx - 26.0, ky - 8.0, H + 0.4) * Cylinder(1.4, 1.0) + Pos(kx - 26.0, ky - 8.0, H + 0.9) * Sphere(1.4)
-    add("Status LED live DC (amber)", led2, "#F59E0B", "emissive", 3, "shell", (0, 0, LID_UP))
+    add("Menu keys", keys, "#6B7280", "plastic", 18, "shell", (0, 0, LID_UP))
+    for (lx, ly), col, nm in zip(P["led_xy"], ("#22C55E", "#F59E0B"), ("ready (green)", "live DC (amber)")):
+        led = Pos(lx, ly, H + 0.5) * Cylinder(P["led_flange_r"], 1.0) + Pos(lx, ly, H + 1.0) * Sphere(P["led_body_r"])
+        add(f"Status LED {nm}", led, col, "emissive", 18, "shell", (0, 0, LID_UP))
 
     # raised markings: brand on the lid front face, warning label by the isolator
     brand = _text("PVTrace", 9.0, 0, 0, 0, h=0.4,
@@ -576,7 +576,23 @@ def product_parts(P=PARAMS):
         band = _xcyl(MC4_R + 1.0, xm + 13.0, xm + 15.0, y1, MC4_R)
         add(f"MC4 polarity band {name}", band, col, "plastic", 11, "shell", (120, 0, 0))
 
-    _internals(P, M, add)
+    # The constructable design carries every board and part on a 1.5 mm chassis plate on five standoffs (PVT-DDR-003 C5)
+    # and hangs the display board from the lid on 7 mm spacers (C4); the concept drew them on the floor.
+    DV = derived(P)
+    dz_floor = DV["plate_top"] - t                     # parts that stood on the floor now stand on the plate
+    dz_board = DV["pcb_bot"] - (H - t - P["controller"][2] - 1)   # display board at its constructable height
+
+    def add_int(name, shape, color, material, bom, group, explode):
+        if shape is not None and group == "internal":
+            if bom in (4, 5, 6, 7, 8, 10, 14):
+                shape = Pos(0, 0, dz_floor) * shape
+            elif bom == 3:
+                shape = Pos(0, 0, dz_board) * shape
+        add(name, shape, color, material, bom, group, explode)
+    _internals(P, M, add_int)
+    CC = build_components(P)
+    add("Chassis plate, 1.5 mm polycarbonate", CC["plate"], "#CDD3D9", "plastic", 16, "internal", (0, 0, 60))
+    add("Chassis plate standoffs (five)", CC["plate_standoffs"], C_METAL, "metal", 13, "internal", (0, 0, 30))
 
     # 12 sensor pod (accessory, beside the case), model.py pod in its own frame
     pod_at = Pos(-40.0, -230.0, 24.0)

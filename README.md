@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827) [![DOI](https://zenodo.org/badge/1388477754.svg)](https://zenodo.org/badge/latestdoi/1388477754) [![REUSE compliant](https://github.com/BoujeeEnjinia1701/pvtrace/actions/workflows/reuse.yml/badge.svg)](https://github.com/BoujeeEnjinia1701/pvtrace/actions/workflows/reuse.yml) [![Archived in Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/BoujeeEnjinia1701/pvtrace/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/BoujeeEnjinia1701/pvtrace)
 
-**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype cost:** about USD 178 (value-engineering target USD 165) · **Difficulty:** 3 of 5
+**Area:** CleanTech · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype cost:** about USD 192 (value-engineering target USD 165) · **Difficulty:** 3 of 5
 
 A handheld solar panel IV curve tracer that sweeps a panel's current and voltage in the field, flags shading, cracked cells and degraded strings, and helps grade second-life panels.
 
@@ -61,7 +61,7 @@ A handheld tracer for single modules and short strings up to 100 V and 20 A. The
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md) · Requirements: [docs/03-requirements.md](docs/03-requirements.md) · Sizing: [docs/04-calcs/01-sizing.md](docs/04-calcs/01-sizing.md) · Decisions: [docs/decisions/0001-trl2-review-decisions.md](docs/decisions/0001-trl2-review-decisions.md), [docs/decisions/0002-recommendations-accepted.md](docs/decisions/0002-recommendations-accepted.md), [docs/decisions/0003-design-for-construction.md](docs/decisions/0003-design-for-construction.md)
 
-Not met on paper at TRL 3: the 20 ms minimum sweep time for high-current modules when the capacitors are at the low end of their tolerance (Amish decided on 2026-10-02 to measure the capacitors at build and select a set of at least 6.4 mF to hold it), sunlight readability of the display (a sun hood is now fitted, but readability cannot be shown until a field check), and insulation screening of second-life modules (out of scope; use an insulation tester alongside). The estimated cost, USD 178, is USD 13 over the USD 165 value-engineering target; savings worth trying are in the [design decisions register](docs/06-design-decisions.md). Details are in the [review note](docs/REVIEW.md).
+The 20 ms minimum sweep time for high-current modules is met on paper because the capacitors are measured at build and a bank of 6.45 mF or more is selected (Amish decided on 2026-10-02 on at least 6.4 mF; 6.4 mF gives 19.9 ms, so 6.45 mF is proposed). Not met on paper at TRL 3: sunlight readability of the display (a sun hood is now fitted, but readability cannot be shown until a field check), and insulation screening of second-life modules (out of scope; use an insulation tester alongside). The estimated cost, USD 192 (with a keypad, status LEDs and a spare capacitor), is USD 27 over the USD 165 value-engineering target; savings worth trying are in the [design decisions register](docs/06-design-decisions.md). Details are in the [review note](docs/REVIEW.md).
 
 ## Key components
 

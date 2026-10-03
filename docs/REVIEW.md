@@ -250,6 +250,40 @@ The design changed visibly (wider sun hood with tabs, smaller window, USB-C sock
 
 Review PVT-DDR-003 and the design decisions register, decide open decisions 1 to 3, then update the renders on the Mac. TRL 4 (building to this plan) stays on hold until Amish says otherwise.
 
+## Session 2026-10-02 (later): approved follow-ups carried out
+
+Amish approved on 2026-10-02 that every follow-up action from the open-decision sign-off be carried out. Of the 6 follow-ups listed in the section below, 5 are done and 1 is not done (reason given).
+
+### Approved follow-ups carried out
+
+1. Decision 4, rerun the R3 calculation: done. `docs/04-calcs/sizing.py` now calculates the selected bank; `results.csv`, PVT-CAL-001, PVT-REQ-001 and the README are updated. R3 changes from not met to met on paper (20.1 ms high-current case at 6.45 mF), and R4 is 501 pairs.
+2. Decision 4, spare capacitors: done. BOM line 5 buys four 2200 µF capacitors (one spare, USD 6, basis: the existing USD 6 unit price) and fits the best three. Three parts need an average of 2150 µF each, 2.3 % below rated, so one spare gives a reasonable choice; buy more from the same batch if no three reach 6.45 mF.
+3. Decision 6, BOM line for the keypad and status LEDs: done. New line 18, USD 8, with the price basis in the notes column and in `bom/bom-notes.md`. The total is USD 192.
+4. Decision 6, keypad and status LEDs in the model and drawings: done. `cad/src/model.py` has the keypad (bonded on the lid, tail through a 12 x 1.6 mm slot), two LEDs in 5.4 mm lid holes with clips and nuts, and 23 new constructability checks (206 of 206 pass). STEP and STL regenerated. Redrawn: PVT-DWG-001 Rev P4, the lid making sketch PVT-DWG-104, the lid hole layout, the overview (19 components), step 9, steps 10 and 11, and the wiring diagram. `docs/05-build-plan.md` v0.3 has the slot and holes in section 3.5, wiring item 11 and the bought-parts list.
+5. Decision 6, appearance model: done. `cad/src/product_model.py` now stands the boards on the 1.5 mm chassis plate (plate and standoffs added), hangs the display board at its constructable height and takes the keypad and LED positions from the model; the wider hood already came from the model. Render scenes exported (below); the photoreal renders, card and social preview are made on Amish's Mac next.
+6. Decision 3, weigh the prototype at TRL 4 against R12: not done, because TRL 4 is on hold by Amish's instruction.
+
+### Key results
+
+- Requirement status changes: R3 not met to met on paper with the selected bank; R4 value 410 to 501 pairs. R12 stays met but the margin falls from about 14 g to about 6 g (1,494 g) with the keypad and LEDs (8 g). No other change.
+- Value-engineering target: USD 165. Estimated cost of the constructable design: USD 192 (USD 27 over the target); it was USD 178 (USD 13 over). The USD 14 rise is the keypad line (USD 8) and the spare capacitor (USD 6).
+- Documents changed: PVT-CAL-001 v0.5, PVT-REQ-001 v0.7, PVT-PRC-001 v0.7, PVT-BLD-001 v0.3, PVT-DEC-001 v0.3, PVT-DDR-003 v0.3; `bom/bom.csv`, `bom/bom-notes.md`, `README.md`.
+- Render scenes exported to `/home/claude/renders/pvtrace`: hero, exploded and in-use.
+
+### Proposed, awaiting Amish
+
+- Selected capacitor bank of 6.45 mF or more instead of 6.4 mF. At exactly 6.4 mF the high-current module sweeps in 19.9 ms, 0.1 ms short of the 20 ms bound; 6.44 mF is the break-even. Options: keep 6.4 mF and accept 19.9 ms (R3 then misses by 0.5 %), or use 6.45 mF (recommended; the same three capacitors, a slightly stricter selection).
+- Mass margin is now about 6 g. If it matters, a thinner pod housing or shorter leads recover mass; otherwise weigh at TRL 4 as already decided.
+- Appearance deviations from model.py: LED domes, key shapes and the screen artwork are drawn for realism and are not in the engineering model.
+
+### Cross-repo actions
+
+None for this repo.
+
+### Not done
+
+Item 6 above. TRL 4 remains on hold.
+
 ## Session 2026-10-02: open decisions decided
 
 On 2026-10-02 Amish approved every recommendation written for the open decisions: "i approve your recommendations for all 555 open decisions." trl stays 3; nothing was built or tested.
@@ -296,3 +330,7 @@ The sensor pod stays on the safe, low-voltage side of the isolation barrier. The
 ### Recommended next step
 
 Add the keypad and status LEDs to the model and BOM, since without them the constructable design has no usable input control, then rerun R3 with the selection rule. TRL 4 remains on hold by Amish's instruction.
+
+## 2026-10-02: photoreal renders redone on the constructable design
+
+Rendered with Blender Cycles on Amish's Mac from the updated appearance model; captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, in-use. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.

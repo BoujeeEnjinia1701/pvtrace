@@ -1,8 +1,8 @@
 id,value,target,status
 R1,"0 to 100 V; high-voltage case 83 V at -10 °C; capacitors 160 V, MOSFETs 150 V","0 to 100 V, below 120 V",Met (design review)
 R2,0 to 20.48 A full scale; shunt 1.6 W of 3 W at 20 A,0 to 20 A,Met (design review)
-R3,20.5 ms high-current case at 6.6 mF nominal (16.4 ms at -20 %); 32 ms reference; up to 81 ms,20 to 200 ms,Not met (worst-case tolerance)
-R4,"410 pairs minimum (high-current case, -20 % C)",200 or more,Met
+R3,20.1 ms high-current case with the bank selected to 6.45 mF (19.9 ms at the decided 6.4 mF); 32 ms reference; up to 81 ms,20 to 200 ms,Met on paper with a selected bank
+R4,"501 pairs minimum (high-current case, selected bank 6.45 mF)",200 or more,Met
 R5,V ±0.17 % ±0.024 % FS; I ±0.21 % ±0.026 % FS,±1 % of reading ±0.1 % FS,Met on paper (needs calibration)
 R6,Instrument noise 0.08 % per sample; irradiance drift dominates,Pmax ±1 % over 3 sweeps,Not verifiable at TRL 3
 R7,Irradiance ±3.6 to ±5.4 %; temperature probe ±2 °C budget,"±5 %, ±2 °C",At risk
@@ -15,4 +15,4 @@ R13,"Inside about 56 °C (light case) to 73 °C (dark) at 45 °C in sun; TFT wit
 R14,"10.3 h, about 1853 sweeps",8 h or 200 sweeps,Met
 R15,CSV fields defined in PVT-PRC-001; no firmware at TRL 3,"CSV per sweep, USB or Wi-Fi export",Met (design review)
 R16,No insulation test in this instrument,Detect insulation faults,Not met (out of scope)
-R17,USD 178 in parts,Value-engineering target USD 165,Over the target by USD 13
+R17,USD 192 in parts,Value-engineering target USD 165,Over the target by USD 27

@@ -122,16 +122,17 @@ parts = [
     Part("Display sun hood, printed", M["hood"], "#E5E7EB", 15, (0, 0, 470)),
     Part("Chassis plate, polycarbonate", M["plate"], "#A5B4FC", 16, scr(-320, 330)),
     Part("USB-C charging socket", M["usb"], "#374151", 17, scr(-300, 120)),
+    Part("Keypad and status LEDs", M["keypad"], "#0D9488", 18, scr(130, 330)),
 ]
 
 if __name__ == "__main__":
     render_all(
-        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P4",
+        parts, project="PVTrace", title="Handheld IV curve tracer concept", dwg_no="PVT-DWG-010", rev="P5",
         key_figures=["Single modules and short strings to 100 V, 20 A",
-                     "Capacitive load 6.6 mF: sweep about 20 to 68 ms (PVT-CAL-001)",
+                     "Capacitive load, bank selected to 6.45 mF or more: sweep 20 to 81 ms (PVT-CAL-001)",
                      "Up to 33 J per sweep dumped in a 50 W resistor",
                      "Case 220 x 130 x 80 mm with sun hood; about 1.49 kg; isolated",
-                     "USD 178 in parts (value-engineering target USD 165)"],
+                     "USD 192 in parts (value-engineering target USD 165)"],
         scale_figure=False, context=context,
         cut_exclude=("Test leads with MC4 connectors", "Sensor pod: reference cell, temperature"),
         flow={"title": "one sweep, from panel to grade (calculated in PVT-CAL-001; energy in J for a 450 W module)", "unit": "J",

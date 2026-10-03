@@ -23,7 +23,7 @@ from model import PARAMS as P, build_components, build_pod, derived  # noqa: E40
 
 OUT = ROOT / "docs" / "05-build-plan"
 DWG = ROOT / "cad" / "drawings"
-DATE = "2026-10-01"
+DATE = "2026-10-02"
 REPO = "github.com/BoujeeEnjinia1701/pvtrace"
 D = derived(P)
 C = build_components(P)
@@ -34,7 +34,7 @@ COL = {"body": "#D1D5DB", "lid": "#E5E7EB", "glands": "#1F2937", "usb": "#374151
        "standoff": "#6B7280", "caps": "#1D4ED8", "ties": "#111827", "bar": "#475569", "fets": "#7C3AED",
        "dump": "#B45309", "fuse": "#DC2626", "battery": "#C2410C", "meas": "#16A34A", "iso": "#DB2777",
        "isolator": "#F59E0B", "window": "#7DD3FC", "hood": "#64748B", "ctrl": "#0F766E", "housing": "#0EA5E9",
-       "clip": "#0369A1", "cell": "#1E3A8A", "bolt": "#111827", "frame": "#9CA3AF"}
+       "clip": "#0369A1", "cell": "#1E3A8A", "bolt": "#111827", "frame": "#9CA3AF", "keypad": "#0D9488"}
 
 
 def _fuse(shapes):
@@ -97,6 +97,7 @@ def made():
         "lid": part("Lid, cut and drilled", C["lid"], COL["lid"]),
         "window": part("Window", C["window"], COL["window"]),
         "isolator": part("DC isolator", S("isolator", "isolator_screws"), COL["isolator"]),
+        "keypad": part("Keypad and status LEDs", S("keypad", "leds", "led_nuts"), COL["keypad"]),
         "ctrl": part("Display board and spacers", S("controller", "display_standoffs", "display_nuts"), COL["ctrl"]),
         "hood": part("Sun hood and screws", S("hood", "hood_screws"), COL["hood"]),
         "pod": part("Sensor pod", pod_shape(), COL["housing"]),
@@ -110,9 +111,10 @@ def overview():
     off = {"body": (0, 0, 0), "leadg": (90, 0, 0), "leftg": (-90, 0, 0), "feet": (0, 0, 45), "plate": (0, 0, 85),
            "bar": (0, 0, 170), "dump": (0, -20, 135), "fuse": (20, -10, 150), "battery": (0, 50, 215), "meas": (20, 0, 190),
            "iso": (0, 20, 205), "caps": (-20, -70, 190), "lid": (0, 0, 330), "window": (0, 0, 385), "isolator": (0, 0, 255),
+           "keypad": (0, -45, 395),
            "ctrl": (0, 0, 250), "hood": (0, 0, 420), "pod": (-310, -40, 60)}
     order = ["body", "leadg", "leftg", "feet", "plate", "bar", "dump", "fuse", "battery", "meas", "iso", "caps",
-             "lid", "window", "isolator", "ctrl", "hood", "pod"]
+             "lid", "window", "isolator", "keypad", "ctrl", "hood", "pod"]
     parts = []
     for k in order:
         p = M[k]
@@ -193,7 +195,7 @@ def sheets():
 
     # 104 lid, cut and drilled
     out.append(bv.component_sheet(
-        Part("Lid", C["lid"], COL["lid"]), [M["window"], M["hood"], M["isolator"], M["ctrl"]],
+        Part("Lid", C["lid"], COL["lid"]), [M["window"], M["hood"], M["isolator"], M["ctrl"], M["keypad"]],
         dwg_no="PVT-DWG-104", title="PVTrace lid: cutting and drilling sketch", material="Lid of the bought case, ABS 3 mm",
         view_shape=Pos(0, 0, -P["z_split"]) * C["lid"], inset_view=(30, -55),
         notes=["Positions from the lid's left end and front face, outside, top view.",
@@ -204,6 +206,9 @@ def sheets():
                "DC isolator: 24 mm hole centred 188 from the left end and 109 from",
                "  the front; two 4.4 mm holes 21 mm each side of it, left and right.",
                "Check the isolator maker's cut-out before cutting; follow it if it differs.",
+               "Keypad tail slot 12 x 1.6 mm, centred 146 from the left end and 47 from",
+               "  the front (long side across). Two 5.4 mm LED holes at 124 and 136 from",
+               "  the left end, each 57 from the front. The keypad itself is bonded on.",
                "Tape the face, cut slowly, deburr; clean with soap and water.",
                "Check: the window covers the opening with 4 to 5 mm all round; the",
                "  hood's four tabs line up with the four small holes."],
@@ -396,6 +401,19 @@ def layouts():
     for dx in (-P["isolator_screw_dx"], P["isolator_screw_dx"]):
         ax.add_patch(Circle((X + dx, Y), 2.2, fc="white", ec=INK, lw=0.9))
     ax.text(X, Y + P["isolator_r"] - 1, f"4.4 at {X - P['isolator_screw_dx']:.0f} and {X + P['isolator_screw_dx']:.0f}, {Y:.0f}",
+            ha="center", va="bottom", fontsize=7.2, color=AC)
+    kx_, ky_ = P["keypad_xy"]; kw_, kd_, _kt = P["keypad"]
+    ax.add_patch(Rectangle((kx_ - kw_ / 2 + L / 2, ky_ - kd_ / 2 + W / 2), kw_, kd_, fc="none", ec="#0D9488", lw=0.9, ls="--"))
+    ax.text(kx_ + L / 2, ky_ - kd_ / 2 + W / 2 + 2.0, f"keypad {kw_:.0f} x {kd_:.0f} bonded on top (dashed)", ha="center", va="bottom",
+            fontsize=7.2, color="#0D9488")
+    slx_, sly_ = P["keypad_slot"]
+    sx2, sy2 = kx_ + L / 2, ky_ + kd_ / 2 - 4.0 + W / 2
+    ax.add_patch(Rectangle((sx2 - slx_ / 2, sy2 - sly_ / 2), slx_, sly_, fc="white", ec=INK, lw=1.0))
+    ax.text(sx2, sy2 - 3, f"tail slot {slx_:.0f} x {sly_:.1f} at {sx2:.0f}, {sy2:.0f}", ha="center", va="top", fontsize=7.2, color=AC)
+    for k, (lx_, ly_) in enumerate(P["led_xy"]):
+        ax.add_patch(Circle((lx_ + L / 2, ly_ + W / 2), P["led_hole_r"], fc="white", ec=INK, lw=0.9))
+    lx0, ly0 = P["led_xy"][0]
+    ax.text(lx0 + L / 2 + 6, ly0 + W / 2 + 6, "LED holes 5.4 at\n%.0f and %.0f, %.0f" % (P["led_xy"][0][0] + L / 2, P["led_xy"][1][0] + L / 2, ly0 + W / 2),
             ha="center", va="bottom", fontsize=7.2, color=AC)
     for (px, py) in D["pillars"]:
         ax.add_patch(Circle((px + L / 2, py + W / 2), P["pillar_r"], fc="#E5E7EB", ec=MUT, lw=0.6))
@@ -636,17 +654,19 @@ def steps(only=None):
     st(9, [lid, part("Window", C["window"], "#9CA3AF")],
        [mv(part("Isolator body and flange", iso_body, COL["isolator"]), (0, 0, -60)),
         mv(part("Maker's two screws", C["isolator_screws"], COL["bolt"]), (0, 0, 40)),
-        mv(part("Knob and handle", iso_top, "#B45309"), (0, 0, 70))], "DC isolator into the lid",
-       "Body from below, its flange against the lid; the maker's two screws from above; then the knob and handle",
+        mv(part("Knob and handle", iso_top, "#B45309"), (0, 0, 70)),
+        mv(part("Keypad (tail through the slot) and two LEDs with clips", S("keypad", "leds", "led_nuts"), COL["keypad"]), (0, -40, 50))],
+       "DC isolator, keypad and LEDs into the lid",
+       "Isolator from below, screws and knob from above; LED clips in their holes; keypad bonded on, tail through the slot",
        elev=20, azim=-55, label_done=False)
-    st(10, [lid, part("Window and isolator", S("window", "isolator", "isolator_screws"), "#9CA3AF")],
+    st(10, [lid, part("Window, isolator, keypad and LEDs", S("window", "isolator", "isolator_screws", "keypad", "leds", "led_nuts"), "#9CA3AF")],
        [mv(part("Sun hood and four screws", S("hood", "hood_screws"), COL["hood"]), (0, 0, 50)),
         mv(part("Display board, spacers and nuts", S("controller", "display_standoffs", "display_nuts"), COL["ctrl"]), (0, -75, -55))],
        "sun hood on top, display board underneath",
        "Four M3 x 20 screws with sealing washers down through hood tabs, lid and spacers; nuts under the board",
        elev=15, azim=-55, label_done=False)
     lid_all = part("Lid with window, isolator, hood and display board",
-                   S("lid", "window", "isolator", "isolator_screws", "hood", "hood_screws", "controller",
+                   S("lid", "window", "isolator", "isolator_screws", "keypad", "leds", "led_nuts", "hood", "hood_screws", "controller",
                      "display_standoffs", "display_nuts"), "#93C5FD")
     st(11, [body, M["leadg"], M["leftg"], plate_all], [mv(lid_all, (0, 0, 110))], "close the case",
        "Connect the isolator and display leads with a service loop; gasket clean; lid screws evenly in a cross pattern",
@@ -706,6 +726,7 @@ def wiring():
     blk(104, 46, 12, 12, "Sensor pod", "reference cell,\nprobe; 3 m cable,\nM12 gland", "#0EA5E9")
     blk(86, 22, 14, 12, "Cell, charger", "18650, USB-C\ncharger, 5 V boost", "#C2410C")
     blk(104, 23, 12, 9, "USB-C socket", "IP65, cap", "#374151")
+    blk(104, 35, 12, 9, "Keypad, LEDs", "3 keys, 2 LEDs,\nin the lid", "#0D9488")
     # PV + path along the top row
     wire([(16, 54), (21, 54)], RED); lab(18.5, 54.6, "4 mm²", RED)
     wire([(31, 54), (36, 54)], RED); lab(33.5, 54.6, "4 mm²", RED)
@@ -722,9 +743,10 @@ def wiring():
     wire([(68, 53), (72, 53)], BLU, 1.2)
     wire([(80, 53), (86, 53)], BLU, 1.2); lab(83, 53.6, "SPI", BLU)
     wire([(86, 28), (78.5, 28), (78.5, 42)], RED, 1.2); lab(82.2, 28.6, "5 V", RED)
-    wire([(93, 34), (93, 46)], RED, 1.2); lab(93.6, 40, "5 V, 0.5 mm²", RED, "left", "center")
+    wire([(93, 34), (93, 46)], RED, 1.2); lab(92.4, 40, "5 V, 0.5 mm²", RED, "right", "center")
     wire([(104, 52), (100, 52)], BLU, 1.2); lab(102, 52.6, "0.25", BLU)
     wire([(104, 27.5), (100, 27.5)], RED, 1.2); lab(102, 28.1, "charge", RED)
+    wire([(104, 41), (98.5, 41), (98.5, 46)], BLU, 1.2); lab(101.2, 41.6, "6-way", BLU)
     ax.text(3, 10.2, "Safety: no fuse and no cell in their holders, and the isolator open, until the stop points in section 6 of the plan "
             "are passed. Treat the capacitors as charged until the display reads below 30 V.",
             fontsize=7.4, color="#B45309", fontweight="bold")

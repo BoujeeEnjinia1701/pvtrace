@@ -3,7 +3,7 @@ doc_id: PVT-DDR-003
 title: PVTrace design for construction
 project: PVTrace
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: Accepted by Amish on 2026-10-02, including the recommendations for A1 and A2
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Cost, mass margin and requirement counts updated for the decisions of 2026-10-02 (keypad, LEDs, capacitor selection)"
 ---
 
 # 0003: Design for construction
@@ -52,8 +56,8 @@ The changes keep what the instrument does: the same case, rating, load, isolatio
 
 | Item | Change | Reason |
 | --- | --- | --- |
-| Cost | BOM lines 1 to 4, 12, 13 and 15 respecified; lines 3, 12 and 13 repriced (+$6); new lines 16 (+$3) and 17 (+$5). Estimated cost USD 178, against the unchanged value-engineering target of USD 165 (`budget_usd`): USD 13 over the target. | Parts added for construction. |
-| Mass | 1.49 kg (was 1.43 kg): chassis plate 45 g, USB-C socket 8 g, window corrected to 16 g, hood 17 g. R12 (1.5 kg) is still met, with about 14 g to spare [PVT-CAL-001 section 7]. | The plate is 1.5 mm, not 2 mm, to keep R12. |
+| Cost | BOM lines 1 to 4, 12, 13 and 15 respecified; lines 3, 12 and 13 repriced (+$6); new lines 16 (+$3) and 17 (+$5). Estimated cost USD 178 at the time of this record; USD 192 (USD 27 over the USD 165 target) after the keypad, LEDs and a spare capacitor added on 2026-10-02 (PVT-CAL-001 v0.5). | Parts added for construction. |
+| Mass | 1.49 kg (was 1.43 kg): chassis plate 45 g, USB-C socket 8 g, window corrected to 16 g, hood 17 g. R12 (1.5 kg) is still met, with about 14 g to spare [PVT-CAL-001 section 7]; the keypad and LEDs (8 g) reduce the margin to about 6 g. | The plate is 1.5 mm, not 2 mm, to keep R12. |
 | Drawing | PVT-DWG-001 Rev P3; making sketches PVT-DWG-101 to 108 added; concept blueprint PVT-DWG-010 Rev P4. | Follows the model. |
 | Documents | PVT-CAL-001 v0.3 (mass, cost), PVT-REQ-001 v0.5 (R12, R17), PVT-PRC-001 v0.5 (components, key numbers). No requirement changed status except R17, now reported against the value-engineering target. | Follows the model. |
 | Electrical and thermal | Unchanged: the sweep, discharge and heat calculations do not depend on how the parts are fixed. The discharge resistor now sits on a plastic plate rather than the floor; its free-air rating is to be confirmed when bought (design decisions register). | |
@@ -69,6 +73,6 @@ The changes keep what the instrument does: the same case, rating, load, isolatio
 
 - `design_state: constructable` in `project.yaml`. The build plan PVT-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); open items are in the design decisions register PVT-DEC-001.
 - With A1 and A2 accepted, the sensor pod is read on the controller side through its own 16-bit ADC, and the prototype is weighed at TRL 4 against R12.
-- Requirement status: three not met (R3 at worst-case tolerance, R13 display readability, R16 out of scope), two at risk (R7, R8), two not verifiable at TRL 3 (R6, R9), nine met, and R17 reported as USD 13 over the value-engineering target.
+- Requirement status: as recorded on 2026-10-01: three not met (R3, R13, R16), two at risk (R7, R8), two not verifiable at TRL 3 (R6, R9), nine met. On 2026-10-02, R3 became met on paper with the selected capacitor bank (two not met, ten met), and R17 is USD 27 over the value-engineering target.
 - The photoreal renders (`media/render-*.png`), `media/card.png` and `media/social-preview.png` and the appearance model `cad/src/product_model.py` show the concept internals and the narrower hood. They need updating on Amish's Mac, where Blender is.
 - The case, display board, isolator, fuse holder and USB-C socket are chosen at TRL 4; their sizes and fixing patterns must be checked then and the drawings moved to suit.
