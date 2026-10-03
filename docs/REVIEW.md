@@ -334,3 +334,7 @@ Add the keypad and status LEDs to the model and BOM, since without them the cons
 ## 2026-10-02: photoreal renders redone on the constructable design
 
 Rendered with Blender Cycles on Amish's Mac from the updated appearance model; captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, in-use. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.
+
+## 2026-10-03: decisions recorded
+
+Amish decided on 2026-10-03: "TIght Margins - i accept the margins". For PVTrace the recommendation was a selected load capacitor bank of 6.45 mF or more, because 6.4 mF gives 19.9 ms against the 20 ms bound. The 6.45 mF minimum is recorded as decided; the BOM line, build plan, concept, requirements, README and calculation note no longer say 6.4 mF or "proposed", and `docs/04-calcs/sizing.py` was rerun (R3 20.1 ms, R4 501 pairs, unchanged).

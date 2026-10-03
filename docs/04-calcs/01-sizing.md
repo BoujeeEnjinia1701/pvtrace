@@ -3,9 +3,9 @@ doc_id: PVT-CAL-001
 title: PVTrace sizing calculations
 project: PVTrace
 doc_type: Calculation note
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-03'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "sizing.py rerun for the capacitor bank selected at build (6.45 mF; R3 and R4 met on paper), a spare capacitor and the keypad and status LEDs (BOM line 18): cost USD 192, USD 27 over the target; mass 1,494 g, margin about 6 g; results.csv regenerated"
+- version: "0.6"
+  date: '2026-10-03'
+  author: Amish Chadha
+  change: "Selected bank minimum of 6.45 mF recorded as decided by Amish on 2026-10-03; 'proposed' removed; sizing.py comment updated and rerun"
 ---
 
 # PVTrace sizing calculations
@@ -76,7 +80,7 @@ Table 2. Sweep with 6.6 mF (single-diode model)
 | Rating limit, 100 V, 20 A | 37.7 | 30.1 | 25.1 | 942 | 32.3 | 1.13 | 6.6 |
 
 - **R3 with capacitors as bought is not met at worst-case tolerance.** The shortest sweep is 20.5 ms at nominal capacitance but 16.4 ms if the three capacitors are 20 % low. Holding 20 ms at -20 % would need 8.0 mF rated, which is a fourth capacitor. Amish decided on 2026-10-02 (PVT-DEC-001, item 4) not to add one but to measure each capacitor at build and fit the best three.
-- **R3 with the selected bank.** The decided bank is 6.4 mF or more. On the high-current case 6.4 mF gives 19.9 ms, 0.1 ms short, and 20 ms needs 6.44 mF, so the calculation uses **6.45 mF** (proposed, awaiting Amish: the decided figure rounded up so the 20 ms bound holds). At 6.45 mF the high-current case sweeps in 20.05 ms, the shortest sweep of any case is 20.1 ms and the minimum is 501 V-I pairs, so **R3 and R4 are met on paper** with a bank selected to 6.45 mF or more. Three 2200 µF parts need an average of 2150 µF each, 2.3 % below rated, so BOM line 5 buys four and fits the best three (one spare). The longest sweep, the high-voltage case with +20 % capacitance, is about 81 ms, well inside 200 ms. The 4.4 mF column reproduces the TRL 2 estimates (13, 21 and 43 ms) within 2 ms, which checks the TRL 2 scaling.
+- **R3 with the selected bank.** The bank decided on 2026-10-02 was 6.4 mF or more. On the high-current case 6.4 mF gives 19.9 ms, 0.1 ms short, and 20 ms needs 6.44 mF, so Amish decided on 2026-10-03 that the minimum is **6.45 mF**, which the calculation uses. At 6.45 mF the high-current case sweeps in 20.05 ms, the shortest sweep of any case is 20.1 ms and the minimum is 501 V-I pairs, so **R3 and R4 are met on paper** with a bank selected to 6.45 mF or more. Three 2200 µF parts need an average of 2150 µF each, 2.3 % below rated, so BOM line 5 buys four and fits the best three (one spare). The longest sweep, the high-voltage case with +20 % capacitance, is about 81 ms, well inside 200 ms. The 4.4 mF column reproduces the TRL 2 estimates (13, 21 and 43 ms) within 2 ms, which checks the TRL 2 scaling.
 - **R4 is met.** The fewest pairs are 410 (high-current case, -20 % capacitance), against 200.
 - **Isc.** Loop resistance holds the module at 0.34 to 1.13 V at the first sample, 1 to 2 % of Voc, so firmware extrapolates Isc from the first samples. Pre-charging the bank negative is not needed.
 - **Module capacitance.** With a capacitive load dV/dt = I / C_load, so the module's own capacitance C_mod causes a current error of about C_mod / C_load, independent of the sweep time. An error of 0.5 % or less needs C_mod of 26 µF or less at the lowest load capacitance. The capacitance of TOPCon and HJT modules at MPP is not verified in this note; the 20 ms bound in R3 remains a working figure until a source or a measurement confirms it.

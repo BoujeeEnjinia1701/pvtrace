@@ -3,9 +3,9 @@ doc_id: PVT-REQ-001
 title: PVTrace requirements
 project: PVTrace
 doc_type: Requirements
-version: "0.7"
+version: "0.8"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-03'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -37,6 +37,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "R3 now met on paper with the capacitor bank selected at build (PVT-CAL-001 v0.5); R17 restated to USD 192, USD 27 over the target; R12 margin about 6 g"
+- version: "0.8"
+  date: '2026-10-03'
+  author: Amish Chadha
+  change: "R3 wording: selected capacitor bank minimum of 6.45 mF decided by Amish on 2026-10-03"
 ---
 
 # PVTrace requirements
@@ -51,7 +55,7 @@ Table 1. Requirements
 | --- | --- | --- | --- | --- |
 | R1 | Voltage range | 0 to 100 V DC open circuit, including cold-weather Voc rise; hard limit below 120 V | Component ratings; calculation | Met by design review: high-voltage case 83 V at -10 °C; 160 V capacitors, 150 V MOSFETs. Two 450 W modules in series (109 V cold) are refused |
 | R2 | Current range | 0 to 20 A short circuit | Shunt and switch ratings | Met by design review: 20.48 A full scale; shunt 1.6 W of 3 W |
-| R3 | Sweep duration, to limit capacitive error in high-efficiency cells | 20 to 200 ms from Isc to Voc for any module in range | Sweep model; later bench sweep | **Met on paper with a selected bank** (changed from not met on 2026-10-02): Amish decided to measure the capacitors at build and select a set of at least 6.4 mF (PVT-DEC-001, item 4). The high-current case then sweeps in 20.1 ms at 6.45 mF (19.9 ms at exactly 6.4 mF, so 6.45 mF is proposed, awaiting Amish); longest 81 ms. Capacitors as bought reach only 16.4 ms at -20 % |
+| R3 | Sweep duration, to limit capacitive error in high-efficiency cells | 20 to 200 ms from Isc to Voc for any module in range | Sweep model; later bench sweep | **Met on paper with a selected bank** (changed from not met on 2026-10-02): Amish decided to measure the capacitors at build and select a set of at least 6.4 mF (PVT-DEC-001, item 4); on 2026-10-03 he decided the minimum is 6.45 mF. The high-current case then sweeps in 20.1 ms at 6.45 mF (19.9 ms at exactly 6.4 mF); longest 81 ms. Capacitors as bought reach only 16.4 ms at -20 % |
 | R4 | Curve resolution | 200 or more V-I pairs per sweep | Sample-rate calculation | Met: 410 pairs or more |
 | R5 | Measurement accuracy after calibration | Voltage and current within ±1 % of reading ±0.1 % of full scale | Error budget; later check against a calibrated meter | Met on paper: about ±0.2 % of reading ±0.03 % of full scale after calibration |
 | R6 | Repeatability | Pmax within ±1 % over 3 consecutive sweeps at stable irradiance (±1 % change) | Later field test | Not verifiable at TRL 3; instrument noise about 0.08 % per sample |

@@ -3,9 +3,9 @@ doc_id: PVT-DEC-001
 title: PVTrace design decisions register
 project: PVTrace
 doc_type: Design decisions register
-version: "0.3"
+version: "0.4"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-03'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -21,6 +21,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "Cost USD 192 (USD 27 over the target) with the keypad and status LEDs (BOM line 18) and a spare capacitor; R3 met on paper with the selected bank"
+  - version: "0.4"
+    date: '2026-10-03'
+    author: Amish Chadha
+    change: "Selected capacitor bank minimum recorded as 6.45 mF, accepted by Amish on 2026-10-03; row added; item 9 of the parts to confirm updated"
 ---
 
 # PVTrace design decisions register
@@ -43,7 +47,7 @@ None. All open decisions were decided on 2026-10-02.
 | 6 | The isolation barrier parts' working voltage and test rating | The barrier must withstand module voltage with margin; checked by the 500 V insulation test | `docs/REVIEW.md`, TRL 3 safety concerns |
 | 7 | The USB-C socket has an M16 thread, IP65 or better with a tethered cap | Sets the left end hole and keeps IP54 | PVT-DDR-003 C10 |
 | 8 | The modules to be tested have frames 30 to 40 mm deep with a bottom flange | The pod clip grips the frame between its top jaw and thumb screw | PVT-DDR-003 C11 |
-| 9 | The three load capacitors, measured one by one, give at least 6.4 mF together; if not, select others from a larger batch | R3 at the 20 ms lower bound (decided 2026-10-02) | Decision of 2026-10-02 (open item 4); PVT-CAL-001 section 2 |
+| 9 | The three load capacitors, measured one by one, give at least 6.45 mF together; if not, select others from a larger batch | R3 at the 20 ms lower bound (decided 2026-10-02) | Decision of 2026-10-02 (open item 4); PVT-CAL-001 section 2 |
 
 ## Value engineering
 
@@ -66,6 +70,7 @@ Value-engineering target: USD 165 (a hypothetical control target, not a limit). 
 | 2026-10-02 | Open item 1: design for construction accepted: C1 to C11 and their knock-on changes, as made | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, Tables 1 and 2 |
 | 2026-10-02 | Open item 2: the sensor pod is read on the controller side of the isolation barrier through its own 16-bit ADC (about USD 3, as modelled) | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, A1 |
 | 2026-10-02 | Open item 3: the R12 mass margin of about 14 g is accepted, and the prototype is weighed at TRL 4 | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-003, A2 |
-| 2026-10-02 | Open item 4: R3 at worst-case tolerance: each capacitor is measured at build and a set is selected that gives at least 6.4 mF; the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-001 item 11; PVT-DDR-002 Table 2 |
+| 2026-10-02 | Open item 4: R3 at worst-case tolerance: each capacitor is measured at build and a set is selected that gives at least 6.4 mF (restated as 6.45 mF on 2026-10-03, below); the 20 ms bound is relaxed later only if TOPCon and HJT capacitance data justify it | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-001 item 11; PVT-DDR-002 Table 2 |
 | 2026-10-02 | Open item 5: first co-design partner, the first candidate type to approach (not yet agreed): a second-life panel refurbisher or recycler that tests used modules in volume, with a TVET solar course as a good second partner for the teaching use | Amish: "i approve your recommendations for all 555 open decisions." | PVT-DDR-001 item 10; PVT-DDR-002 Table 2 |
 | 2026-10-02 | Open item 6: the case shape items of the appearance model are accepted (corner radii, corner boots, side grips, USB-C flap, labels, lead routing, pod fillets); the keypad and status LEDs are kept, and a BOM line is added for them | Amish: "i approve your recommendations for all 555 open decisions." | `docs/REVIEW.md`, 2026-09-26 session, items 1 to 4 |
+| 2026-10-03 | Selected load capacitor bank of 6.45 mF or more (the 6.4 mF minimum of 2026-10-02 gives 19.9 ms on the high-current case against the 20 ms bound; 6.45 mF gives 20.05 ms), as recommended | Amish: "TIght Margins - i accept the margins" | PVT-DEC-001 item 4 of 2026-10-02; PVT-CAL-001 section 2; [REVIEW.md](REVIEW.md), session 2026-10-03 |

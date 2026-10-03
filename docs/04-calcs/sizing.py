@@ -190,7 +190,7 @@ print(f"Capacitance for 20 ms on the high-current case: {c_needed_nom * 1e3:.2f}
       f"{c_needed / (1 - C_TOL) * 1e3:.2f} mF rated if -20 % tolerance must still give 20 ms")
 # Decided 2026-10-02 (PVT-DEC-001, item 4): the bank is measured and selected, so the worst case is the selected
 # bank, not -20 %. 6.4 mF was decided; the 20 ms bound needs 6.44 mF on the high-current case, so 6.45 mF is used
-# here (proposed, awaiting Amish).
+# here (decided by Amish, 2026-10-03).
 C_DECIDED, C_SEL = 6.4e-3, 6.45e-3
 t_dec = sweep(hc["p"], hc["voc"], C_DECIDED)[0]
 t_sel = sweep(hc["p"], hc["voc"], C_SEL)[0]
